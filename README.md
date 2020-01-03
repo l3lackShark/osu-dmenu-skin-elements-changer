@@ -11,7 +11,7 @@ Showcase of what it's capable of in it's current state:https://www.youtube.com/w
 **Capabilities**
 - Chaging Defaults/Cursors/FollowPoints on the Fly! (also changes HitCircleOverlap and AnimationFramerate)
 - Backing up previous configuration and Restoring to it later (Restore)
-- Also works with assets that are not in the root skin directory. F.E. $SKIN/Assets/defaults/default-1.png
+- Works with assets that are not in the root skin directory. F.E. $SKIN/Assets/defaults/default-1.png
 
 **Get Started** 
 1. git clone https://github.com/l3lackShark/osu-dmenu-skin-elements-changer.git
