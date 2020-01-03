@@ -7,13 +7,13 @@ export BASE_DIR="/home/blackshark/drives/ps3drive/osu!"
 export NOTIFICATION_SYSTEM="dunstify"
 
 #Get Current Skin Name
-PLAIN_TEXT=$(cat $BASE_DIR/osu\!."$USER".cfg | sed -n 115p | sed 's/^.......//')
+PLAIN_TEXT=$(cat "$BASE_DIR"/osu\!."$USER".cfg | sed -n 115p | sed 's/^.......//')
 #############################
 #Converting Skin Name to Path#
 ##############################
 
 #Get Full Path to Current Skin
-FULL_PATH=$(echo $BASE_DIR/Skins/"$PLAIN_TEXT" | tr -d '\r')
+FULL_PATH=$(echo "$BASE_DIR"/Skins/"$PLAIN_TEXT" | tr -d '\r')
 
 #Get Current skin.ini
 export SKIN_INI_PATH="$FULL_PATH/skin.ini"
@@ -38,7 +38,7 @@ then
         mkdir "$FULL_PATH"/Restore/FollowPoints
         rm -rf "$FULL_PATH"/Restore/FollowPoints/*
         cd "$FULL_PATH" && cp -rf followpoint*.png "$FULL_PATH"/Restore/FollowPoints && cp skin.ini "$FULL_PATH"/Restore/FollowPoints
-        skin=$(ls $BASE_DIR/Skins | dmenu -l 30 -i -p "Select the skin that you want to take FollowPoints from.")
+        skin=$(ls "$BASE_DIR"/Skins | dmenu -l 30 -i -p "Select the skin that you want to take FollowPoints from.")
         TEMP_SKIN_DIR=$(echo "$BASE_DIR/Skins/$skin" | tr -d '\r')
         #echo $TEMP_SKIN_DIR
         cd "$TEMP_SKIN_DIR" || exit
@@ -65,7 +65,7 @@ then
         mkdir "$FULL_PATH"/Restore/FollowPoints
         rm -rf "$FULL_PATH"/Restore/FollowPoints/*
         cd "$FULL_PATH" && cp -rf followpoint*.png "$FULL_PATH"/Restore/FollowPoints && cp skin.ini "$FULL_PATH"/Restore/FollowPoints
-        skin=$(ls $BASE_DIR/Skins | dmenu -l 30 -i -p "Select the skin that you want to take FollowPoints from.")
+        skin=$(ls "$BASE_DIR"/Skins | dmenu -l 30 -i -p "Select the skin that you want to take FollowPoints from.")
         TEMP_SKIN_DIR=$(echo "$BASE_DIR/Skins/$skin" | tr -d '\r')
         #echo $TEMP_SKIN_DIR
         cd "$TEMP_SKIN_DIR" || exit
@@ -147,7 +147,7 @@ then
     mkdir "$FULL_PATH"/Restore/Cursors
     cd "$FULL_PATH" && cp -rf cursor*.png "$FULL_PATH"/Restore/Cursors
     rm -rf cursor*.png
-    skin=$(ls $BASE_DIR/Skins | dmenu -l 30 -i -p "Select the skin that you want to take cursor from.")
+    skin=$(ls "$BASE_DIR"/Skins | dmenu -l 30 -i -p "Select the skin that you want to take cursor from.")
     TEMP_SKIN_DIR=$(echo "$BASE_DIR/Skins/$skin" | tr -d '\r')
     cd "$TEMP_SKIN_DIR" || exit
     cp cursor*.png "$FULL_PATH/"
@@ -180,7 +180,7 @@ then
     if [ "$chosen" = "Skin" ]
     then
         echo "User Have Chosen" "$chosen"
-        skin=$(ls $BASE_DIR/Skins | dmenu -l 30 -i -p "Select the skin that you want to take elements from.")
+        skin=$(ls "$BASE_DIR"/Skins | dmenu -l 30 -i -p "Select the skin that you want to take elements from.")
         mkdir "$FULL_PATH"/Restore
         mkdir "$FULL_PATH"/Restore/Defaults
         rm -rf "$FULL_PATH"/Restore/Defaults/*
