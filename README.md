@@ -8,4 +8,8 @@ Showcase of what it's capable of in it's current state:https://www.youtube.com/w
 - dmenu
 - Probably any Notification Manager in existence, tested with dunstify
 
+**Capabilities**
+- Chaging Defaults/Cursors/FollowPoints on the Fly!
+- Backing up previous configuration and Restoring to it later (Restore)
+
 Feel free to submit any issues or PR's to clean up some of the dirtiness that I've made!
