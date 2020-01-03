@@ -6,7 +6,7 @@ Showcase of what it's capable of in it's current state:https://www.youtube.com/w
 
 **Dependencies:**
 - dmenu
-- Probably any Notification Manager in existence, tested with dunstify
+- Probably any Notification Manager in existence, tested with **dunstify**
 
 **Capabilities**
 - Chaging Defaults/Cursors/FollowPoints on the Fly!
