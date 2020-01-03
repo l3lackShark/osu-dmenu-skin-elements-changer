@@ -51,7 +51,7 @@ then
         else
             $NOTIFICATION_SYSTEM "No FollowPoint files in root, searching..."
             cd "$TEMP_SKIN_DIR" || exit
-            assetpath=$(find -name followpoint.png | sed 's%/[^/]*$%/%' | sed 's/^.\{2\}//')
+            assetpath=$(find . -name followpoint.png | sed 's%/[^/]*$%/%' | sed 's/^.\{2\}//')
             #echo $assetpath
             cd "$assetpath" || exit
             cp followpoint*.png "$FULL_PATH"
