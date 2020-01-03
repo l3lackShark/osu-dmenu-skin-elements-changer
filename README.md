@@ -12,4 +12,10 @@ Showcase of what it's capable of in it's current state:https://www.youtube.com/w
 - Chaging Defaults/Cursors/FollowPoints on the Fly!
 - Backing up previous configuration and Restoring to it later (Restore)
 
+**Get Started** 
+1. git clone https://github.com/l3lackShark/osu-dmenu-skin-elements-changer.git
+2. cd osu-dmenu-skin-elements-changer
+3. chmod +x skin.sh
+4. ./skin.sh
+
 Feel free to submit any issues or PR's to clean up some of the dirtiness that I've made!
