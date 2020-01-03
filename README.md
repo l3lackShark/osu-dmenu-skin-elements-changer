@@ -1,5 +1,5 @@
 # osu-dmenu-skin-elements-changer
-![alt text](https://cdn.discordapp.com/attachments/562954897163812865/662491750459506717/unknown.png "Logo Title Text 1")
+![alt text](https://cdn.discordapp.com/attachments/562954897163812865/662493419066621952/unknown.png "Logo Title Text 1")
 
 Showcase of what it's capable of in it's current state:https://www.youtube.com/watch?v=i9sa8LTaiTA (in Russian, but all the menus are in English)
 
