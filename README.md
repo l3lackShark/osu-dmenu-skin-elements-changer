@@ -16,6 +16,7 @@ Showcase of what it's capable of in it's current state:https://www.youtube.com/w
 1. git clone https://github.com/l3lackShark/osu-dmenu-skin-elements-changer.git
 2. cd osu-dmenu-skin-elements-changer
 3. chmod +x skin.sh
+4. change the 4th and 7th line to match your configuration
 4. ./skin.sh
 
 Feel free to submit any issues or PR's to clean up some of the dirtiness that I've made!
