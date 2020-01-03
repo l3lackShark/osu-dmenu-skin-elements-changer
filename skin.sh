@@ -88,16 +88,16 @@ if [ "$initial" = "Restore" ]
         rm -rf followpoint*.png
         #rm -rf skin.ini
         cd "$FULL_PATH"/Restore/FollowPoints || exit
-        cp * "$FULL_PATH"/
+        cp -- * "$FULL_PATH"/
         $NOTIFICATION_SYSTEM "Restored the FollowPoints!"
     fi
-        if [ "$chosen" = "Defaults" ]
+        if [ "$chosen" = "Defalts" ]
         then
         cd "$FULL_PATH" || exit
         rm -rf default-*.png
         rm -rf skin.ini
         cd "$FULL_PATH"/Restore/Defaults || exit
-        cp * "$FULL_PATH"/
+        cp -- * "$FULL_PATH"/
         $NOTIFICATION_SYSTEM "Restored the Defaults!"
     fi
         if [ "$chosen" = "Cursor" ]
@@ -105,7 +105,7 @@ if [ "$initial" = "Restore" ]
             cd "$FULL_PATH" || exit
             rm -rf cursor*.png
             cd "$FULL_PATH"/Restore/Cursors || exit
-            cp * "$FULL_PATH"/
+            cp -- * "$FULL_PATH"/
             $NOTIFICATION_SYSTEM "Restored the Cursor!"
         fi
 
@@ -174,7 +174,7 @@ if [ "$initial" = "Defaults" ]
                 else
                     $NOTIFICATION_SYSTEM "No default files in root, searching..."
                     cd "$TEMP_SKIN_DIR" || exit
-                    assetpath=$(find -name default-1.png | sed 's%/[^/]*$%/%' | sed 's/^.\{2\}//')
+                    assetpath=$(find . -name default-1.png | sed 's%/[^/]*$%/%' | sed 's/^.\{2\}//')
                     #echo $assetpath
                     cd "$assetpath" || exit
                     cp default-*.png "$FULL_PATH"
@@ -182,7 +182,7 @@ if [ "$initial" = "Defaults" ]
                 fi
 
                 #grep2=$(cat "$TEMP_SKIN_DIR"/skin.ini | grep -E  Combo[0-9]+ | dmenu -i -p "Hello")
-                tmp_hcoverlap=$(cat "$TEMP_SKIN_DIR"/skin.ini | grep HitCircleOverlap)
+                #tmp_hcoverlap=$(cat "$TEMP_SKIN_DIR"/skin.ini | grep HitCircleOverlap)
 
                 #echo $TEMP_SKIN_DIR
                 if cat "$TEMP_SKIN_DIR"/skin.ini | grep -q HitCircleOverlap;
