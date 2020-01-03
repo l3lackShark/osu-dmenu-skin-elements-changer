@@ -119,7 +119,7 @@ then
         cp -- * "$FULL_PATH"/
         $NOTIFICATION_SYSTEM "Restored the FollowPoints!"
     fi
-    if [ "$chosen" = "Defalts" ]
+    if [ "$chosen" = "Defaults" ]
     then
         cd "$FULL_PATH" || exit
         rm -rf default-*.png
