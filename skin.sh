@@ -24,7 +24,7 @@ export SKIN_INI_PATH="$FULL_PATH/skin.ini"
 
 
 #Initial Question
-initial=$(echo -e "Defaults\nFollowPoints\nCursor\nRestore"  | dmenu -i -p "Your current skin is $PLAIN_TEXT, choose your element that you want to modify.")
+initial=$(echo -e "Defaults\nFollowPoints\nCursor\nRestore"  | dmenu -i -p "Your current skin is $PLAIN_TEXT, choose the element that you want to modify.")
 
 
 if [ "$initial" = "FollowPoints" ]
