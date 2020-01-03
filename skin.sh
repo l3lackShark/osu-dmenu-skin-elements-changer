@@ -159,27 +159,7 @@ then
     echo "User Have Chosen $initial, proceeding..."
     echo "$FULL_PATH"
 
-
-    chosen=$(echo -e "Skin\nDots\nNumbers" | dmenu -i -p "Do you want Dots, Numbers or perhaps Defaults from the other Skin?")
-    if [ "$chosen" = "Dots" ]
-    then
-        echo "User Have Chosen" "$chosen"
-        mkdir "$FULL_PATH"/Restore
-        mkdir "$FULL_PATH"/Restore/Defaults
-        cd "$FULL_PATH" && cp -rf  default-*.png "$FULL_PATH"/Restore/Defaults/
-        rm -rf default-*.png && cp -rf "$HOME"/skins/defaults/dots/* "$FULL_PATH"
-    fi
-    if [ "$chosen" = "Numbers" ]
-    then
-        echo "User Have Chosen" "$chosen"
-        mkdir "$FULL_PATH"/Restore
-        mkdir "$FULL_PATH"/Restore/Defaults
-        cd "$FULL_PATH" && cp -rf  default-*.png "$FULL_PATH"/Restore/Defaults/
-        rm -rf default-*.png && cp -rf "$HOME"/skins/defaults/numbers/* "$FULL_PATH"
-    fi
-    if [ "$chosen" = "Skin" ]
-    then
-        echo "User Have Chosen" "$chosen"
+        echo "User Have Chosen" "$initial"
         skin=$(ls "$BASE_DIR"/Skins | dmenu -l 30 -i -p "Select the skin that you want to take elements from.")
         mkdir "$FULL_PATH"/Restore
         mkdir "$FULL_PATH"/Restore/Defaults
@@ -226,6 +206,5 @@ then
             $NOTIFICATION_SYSTEM "HitCircleOverlap not found"
         fi
     fi
-fi
 
 
