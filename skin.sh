@@ -31,6 +31,34 @@ if [ "$initial" = "FollowPoints" ]
 then
     echo "User Have Chosen" "$initial"
     chosen=$(echo -e "Yes\nNo" | dmenu -i -p "Also include AnimationFramerate? (might break some animations but guarantees correct followpoint framerate.)")
+
+    if [ "$chosen" = "No"  ]
+    then
+        mkdir "$FULL_PATH"/Restore
+        mkdir "$FULL_PATH"/Restore/FollowPoints
+        rm -rf "$FULL_PATH"/Restore/FollowPoints/*
+        cd "$FULL_PATH" && cp -rf followpoint*.png "$FULL_PATH"/Restore/FollowPoints && cp skin.ini "$FULL_PATH"/Restore/FollowPoints
+        skin=$(ls $BASE_DIR/Skins | dmenu -l 30 -i -p "Select the skin that you want to take FollowPoints from.")
+        TEMP_SKIN_DIR=$(echo "$BASE_DIR/Skins/$skin" | tr -d '\r')
+        #echo $TEMP_SKIN_DIR
+        cd "$TEMP_SKIN_DIR" || exit
+        if [[ $(ls | grep followpoint) ]];
+        then
+            $NOTIFICATION_SYSTEM "OK!, copying files over..."
+            cd "$FULL_PATH" || exit
+            rm -rf followpoint*.png
+            cd "$TEMP_SKIN_DIR" || exit
+            cp -rf followpoint*.png "$FULL_PATH"
+        else
+            $NOTIFICATION_SYSTEM "No FollowPoint files in root, searching..."
+            cd "$TEMP_SKIN_DIR" || exit
+            assetpath=$(find . -name followpoint.png | sed 's%/[^/]*$%/%' | sed 's/^.\{2\}//')
+            #echo $assetpath
+            cd "$assetpath" || exit
+            cp followpoint*.png "$FULL_PATH"
+            $NOTIFICATION_SYSTEM "OK! Found Assets in:""$assetpath"
+        fi
+    fi
     if [ "$chosen" = "Yes" ]
     then
         mkdir "$FULL_PATH"/Restore
