@@ -6,6 +6,7 @@ Showcase of what it's capable of in it's current state:https://www.youtube.com/w
 
 Dependencies:
 dmenu
-(probably any Notification Manager in existence, tested with `dunstify`)
+
+Probably any Notification Manager in existence, tested with `dunstify`
 
 Feel free to submit any issues or PR's to clean up some of the dirtiness that I've made!
