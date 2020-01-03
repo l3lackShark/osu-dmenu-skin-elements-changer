@@ -114,7 +114,7 @@ then
     then
         cd "$FULL_PATH" || exit
         rm -rf followpoint*.png
-        #rm -rf skin.ini
+        rm -rf skin.ini
         cd "$FULL_PATH"/Restore/FollowPoints || exit
         cp -- * "$FULL_PATH"/
         $NOTIFICATION_SYSTEM "Restored the FollowPoints!"
