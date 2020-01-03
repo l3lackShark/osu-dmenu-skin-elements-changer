@@ -1,4 +1,5 @@
 # osu-dmenu-skin-elements-changer
+![alt text](https://cdn.discordapp.com/attachments/562954897163812865/662491750459506717/unknown.png "Logo Title Text 1")
 
 Showcase of what it's capable of in it's current state:https://www.youtube.com/watch?v=i9sa8LTaiTA (in Russian, but all the menus are in English)
 
@@ -17,5 +18,10 @@ Showcase of what it's capable of in it's current state:https://www.youtube.com/w
 3. chmod +x skin.sh
 4. change the 4th and 7th line to match your configuration
 4. ./skin.sh
+
+**TODO**
+- Proper Restore functionality (currently Restore folder only saves previous configuration[overrides each time])
+- Ability to change ComboColors
+
 
 Feel free to submit any issues or PR's to clean up some of the dirtiness that I've made!
