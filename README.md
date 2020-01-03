@@ -18,4 +18,9 @@ Showcase of what it's capable of in it's current state:https://www.youtube.com/w
 4. change the 4th and 7th line to match your configuration
 4. ./skin.sh
 
+**TODO**
+- Proper Restore functionality (currently Restore folder only saves previous configuration[overrides each time])
+- Ability to change ComboColors
+
+
 Feel free to submit any issues or PR's to clean up some of the dirtiness that I've made!
