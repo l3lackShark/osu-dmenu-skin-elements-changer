@@ -3,8 +3,8 @@
 #Put your osu! folder here!
 export BASE_DIR="/home/blackshark/drives/ps3drive/osu!"
 
-#Put your notification system executable here!
-export NOTIFICATION_SYSTEM="dunstify"
+#Do not touch this unless it doesnt' work! (specify your notification manager executable)
+export NOTIFICATION_SYSTEM="notify-send"
 
 #Get Current Skin Name
 PLAIN_TEXT=$(cat "$BASE_DIR"/osu\!."$USER".cfg | sed -n 115p | sed 's/^.......//')
