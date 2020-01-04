@@ -25,18 +25,27 @@ export SKIN_INI_PATH="$FULL_PATH/skin.ini"
 #Initial Question
 initial=$(echo -e "Defaults\nFollowPoints\nCursor\nRestore"  | dmenu -i -p "Your current skin is $PLAIN_TEXT, choose the element that you want to modify.")
 
+if [ "$initial" = "" ]
+then
+    exit 1
+fi
 
 if [ "$initial" = "FollowPoints" ]
 then
     echo "User Have Chosen" "$initial"
     chosen=$(echo -e "Yes\nNo" | dmenu -i -p "Also include AnimationFramerate? (might break some animations but guarantees correct followpoint framerate.)")
+    if [ "$chosen" = "" ]
+    then
+        exit 1
+    fi
 
     if [ "$chosen" = "No"  ]
     then
         mkdir "$FULL_PATH"/Restore
         mkdir "$FULL_PATH"/Restore/FollowPoints
         rm -rf "$FULL_PATH"/Restore/FollowPoints/*
-        cd "$FULL_PATH" && cp -rf followpoint*.png "$FULL_PATH"/Restore/FollowPoints && cp skin.ini "$FULL_PATH"/Restore/FollowPoints
+        cd "$FULL_PATH" || exit
+        cp -rf followpoint*.png "$FULL_PATH"/Restore/FollowPoints && cp skin.ini "$FULL_PATH"/Restore/FollowPoints
         skin=$(ls "$BASE_DIR"/Skins | dmenu -l 30 -i -p "Select the skin that you want to take FollowPoints from.")
         TEMP_SKIN_DIR=$(echo "$BASE_DIR/Skins/$skin" | tr -d '\r')
         #echo $TEMP_SKIN_DIR
@@ -65,7 +74,15 @@ then
         rm -rf "$FULL_PATH"/Restore/FollowPoints/*
         cd "$FULL_PATH" && cp -rf followpoint*.png "$FULL_PATH"/Restore/FollowPoints && cp skin.ini "$FULL_PATH"/Restore/FollowPoints
         skin=$(ls "$BASE_DIR"/Skins | dmenu -l 30 -i -p "Select the skin that you want to take FollowPoints from.")
+        if [ "$skin" = "" ]
+        then
+            exit 1
+        fi
         TEMP_SKIN_DIR=$(echo "$BASE_DIR/Skins/$skin" | tr -d '\r')
+        if "$skin" = ""
+        then
+            exit 1
+        fi
         #echo $TEMP_SKIN_DIR
         cd "$TEMP_SKIN_DIR" || exit
         if [[ $(ls | grep followpoint) ]];
@@ -109,6 +126,10 @@ then
     echo "User Have Chosen" "$initial"
     chosen=$(echo -e "Defaults\nCursor\nFollowPoints" | dmenu -i -p "What do you want to restore?")
 
+    if [ "$chosen" = "" ]
+    then
+        exit 1
+    fi
     if [ "$chosen" = "FollowPoints" ]
     then
         cd "$FULL_PATH" || exit
@@ -149,6 +170,10 @@ then
     cd "$FULL_PATH" && cp -rf cursor*.png "$FULL_PATH"/Restore/Cursors
     rm -rf cursor*.png
     skin=$(ls "$BASE_DIR"/Skins | dmenu -l 30 -i -p "Select the skin that you want to take cursor from.")
+    if [ "$skin" = "" ]
+    then
+        exit 1
+    fi
     TEMP_SKIN_DIR=$(echo "$BASE_DIR/Skins/$skin" | tr -d '\r')
     cd "$TEMP_SKIN_DIR" || exit
     cp cursor*.png "$FULL_PATH/"
@@ -159,9 +184,12 @@ if [ "$initial" = "Defaults" ]
 then
     echo "User Have Chosen $initial, proceeding..."
     echo "$FULL_PATH"
-
-        echo "User Have Chosen" "$initial"
-        skin=$(ls "$BASE_DIR"/Skins | dmenu -l 30 -i -p "Select the skin that you want to take elements from.")
+    skin=$(ls "$BASE_DIR"/Skins | dmenu -l 30 -i -p "Select the skin that you want to take elements from.")
+    echo "$skin"
+    if [ "$skin" = "" ]
+    then
+        exit 1
+    else
         mkdir "$FULL_PATH"/Restore
         mkdir "$FULL_PATH"/Restore/Defaults
         rm -rf "$FULL_PATH"/Restore/Defaults/*
@@ -209,3 +237,4 @@ then
     fi
 
 
+fi
