@@ -3,7 +3,7 @@
 #Put your osu! folder here!
 export BASE_DIR="/home/blackshark/drives/ps3drive/osu!"
 
-#Do not touch this unless it doesnt' work! (specify your notification manager executable)
+#Do not touch this unless it doesn't work! (specify your notification manager executable)
 export NOTIFICATION_SYSTEM="notify-send"
 
 #Get Current Skin Name
@@ -47,6 +47,10 @@ then
         cd "$FULL_PATH" || exit
         cp -rf followpoint*.png "$FULL_PATH"/Restore/FollowPoints && cp skin.ini "$FULL_PATH"/Restore/FollowPoints
         skin=$(ls "$BASE_DIR"/Skins | dmenu -l 30 -i -p "Select the skin that you want to take FollowPoints from.")
+    if [ "$skin" = ""  ]
+    then
+    exit 1 
+    fi
         TEMP_SKIN_DIR=$(echo "$BASE_DIR/Skins/$skin" | tr -d '\r')
         #echo $TEMP_SKIN_DIR
         cd "$TEMP_SKIN_DIR" || exit
