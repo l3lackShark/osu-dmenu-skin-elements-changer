@@ -46,7 +46,6 @@ then
         followcheck=$(ls "$FULL_PATH" | grep followpoint)
         if [ "$followcheck" = "" ] #If it doesn't, then...
         then
-            echo "I haven't exited yet!"
             skin=$(ls "$BASE_DIR"/Skins | dmenu -l 30 -i -p "Select the skin that you want to take FollowPoints from.")
             if [ "$skin" = "" ]
             then
@@ -81,7 +80,6 @@ then
                 $NOTIFICATION_SYSTEM "No FollowPoint files in root, searching..."
                 cd "$TEMP_SKIN_DIR" || exit
                 assetpath=$(find . -name followpoint.png | sed 's%/[^/]*$%/%' | sed 's/^.\{2\}//')
-                echo "$assetpath" "HELLO"
                 cd "$assetpath" || exit
                 $NOTIFICATION_SYSTEM "OK! Found Assets in:""$assetpath" || { $NOTIFICATION_SYSTEM "No followpoints found in that skin!"; exit 1; }
                 cp followpoint*.png "$FULL_PATH"
@@ -103,7 +101,6 @@ then
             cd "$FULL_PATH" || exit
             cp -f followpoint*.png "$FULL_PATH"/Restore/FollowPoints && cp skin.ini "$FULL_PATH"/Restore/FollowPoints
             TEMP_SKIN_DIR=$(echo "$BASE_DIR/Skins/$skin" | tr -d '\r')
-            #echo $TEMP_SKIN_DIR
             cd "$TEMP_SKIN_DIR" || exit
             if [[ $(ls | grep followpoint) ]];
             then
@@ -116,7 +113,6 @@ then
                 $NOTIFICATION_SYSTEM "No FollowPoint files in root, searching..."
                 cd "$TEMP_SKIN_DIR" || exit
                 assetpath=$(find . -name followpoint.png | sed 's%/[^/]*$%/%' | sed 's/^.\{2\}//')
-                #echo $assetpath
                 cd "$assetpath" || exit
                 cp followpoint*.png "$FULL_PATH"
                 $NOTIFICATION_SYSTEM "OK! Found Assets in:""$assetpath"
@@ -129,7 +125,6 @@ then
         followcheck=$(ls "$FULL_PATH" | grep followpoint)
         if [ "$followcheck" = "" ] #If it doesn't, then...
         then
-            echo "I haven't exited yet!"
             skin=$(ls "$BASE_DIR"/Skins | dmenu -l 30 -i -p "Select the skin that you want to take FollowPoints from.")
             if [ "$skin" = "" ]
             then
@@ -138,7 +133,6 @@ then
             $NOTIFICATION_SYSTEM "No followpoints in current directory, just copying new ones over"
             TEMP_SKIN_DIR=$(echo "$BASE_DIR/Skins/$skin" | tr -d '\r')
             cd "$TEMP_SKIN_DIR" || { $NOTIFICATION_SYSTEM "This skin directory doesn't exist!"; exit 1; }
-            echo "$TEMP_SKIN_DIR"
             assetpath=$(find "$TEMP_SKIN_DIR" -name followpoint.png | sed 's%/[^/]*$%/%' | sed 's/^.\{2\}//')
             if [ "$assetpath" = "" ]
             then
@@ -186,7 +180,6 @@ then
             cd "$FULL_PATH" || exit
             cp -f followpoint*.png "$FULL_PATH"/Restore/FollowPoints && cp skin.ini "$FULL_PATH"/Restore/FollowPoints
             TEMP_SKIN_DIR=$(echo "$BASE_DIR/Skins/$skin" | tr -d '\r')
-            #echo $TEMP_SKIN_DIR
             cd "$TEMP_SKIN_DIR" || exit
             if [[ $(ls | grep followpoint) ]];
             then
@@ -199,7 +192,6 @@ then
                 $NOTIFICATION_SYSTEM "No FollowPoint files in root, searching..."
                 cd "$TEMP_SKIN_DIR" || exit
                 assetpath=$(find . -name followpoint.png | sed 's%/[^/]*$%/%' | sed 's/^.\{2\}//')
-                #echo $assetpath
                 cd "$assetpath" || exit
                 cp followpoint*.png "$FULL_PATH"
                 $NOTIFICATION_SYSTEM "OK! Found Assets in:""$assetpath"
@@ -211,8 +203,7 @@ then
             follow_line=$(grep -nr AnimationFramerate "$SKIN_INI_PATH" | cut -f1 -d:)
             tmp_follow_fulltext=$(sed ''"$tmp_follow_line"'!d' "$TEMP_SKIN_DIR"/skin.ini | sed -e 's/^[ \t]*//')
             follow_fulltext=$(sed ''"$follow_line"'!d' "$SKIN_INI_PATH")
-            echo "$tmp_follow_fulltext"
-            sed -i "s/^.AnimationFramerate.*$/$tmp_follow_fulltext/" "$SKIN_INI_PATH" |
+            sed -i "s/^AnimationFramerate.*$/$tmp_follow_fulltext/" "$SKIN_INI_PATH" 
             $NOTIFICATION_SYSTEM "From:$follow_fulltext To:$tmp_follow_fulltext"
         else
             $NOTIFICATION_SYSTEM "AnimationFramerate not found, commenting previous value..."
@@ -290,7 +281,6 @@ fi
 if [ "$initial" = "Defaults" ]
 then
     echo "User Have Chosen $initial, proceeding..."
-    echo "$FULL_PATH"
     skin=$(ls "$BASE_DIR"/Skins | dmenu -l 30 -i -p "Select the skin that you want to take elements from.")
     if [ "$skin" = "" ]
     then
@@ -301,12 +291,9 @@ then
     mkdir "$FULL_PATH"/Restore
     mkdir "$FULL_PATH"/Restore/Defaults
     rm -f "$FULL_PATH"/Restore/Defaults/*
-    #cd $FULL_PATH
     cd "$FULL_PATH" || exit
     cp -f default-*.png "$FULL_PATH"/Restore/Defaults/
     cp skin.ini "$FULL_PATH"/Restore/Defaults/
-
-    #echo $TEMP_SKIN_DIR
     cd "$TEMP_SKIN_DIR" || exit
     if [[ $(ls | grep default) ]];
     then
@@ -319,7 +306,6 @@ then
         $NOTIFICATION_SYSTEM "No default files in root, searching..."
         cd "$TEMP_SKIN_DIR" || exit
         assetpath=$(find . -name default-1.png | sed 's%/[^/]*$%/%' | sed 's/^.\{2\}//')
-        #echo $assetpath
         cd "$assetpath" || exit
         cp default-*.png "$FULL_PATH"
         $NOTIFICATION_SYSTEM "OK! Found Assets in:""$assetpath"
@@ -328,14 +314,12 @@ then
     #grep2=$(cat "$TEMP_SKIN_DIR"/skin.ini | grep -E  Combo[0-9]+ | dmenu -i -p "Hello")
     #tmp_hcoverlap=$(cat "$TEMP_SKIN_DIR"/skin.ini | grep HitCircleOverlap)
 
-    #echo $TEMP_SKIN_DIR
     if cat "$TEMP_SKIN_DIR"/skin.ini | grep -q HitCircleOverlap;
     then
         tmp_hcoverlap_line=$(grep -nr HitCircleOverlap "$TEMP_SKIN_DIR"/skin.ini | cut -f1 -d:)
         hcoverlap_line=$(grep -nr HitCircleOverlap "$SKIN_INI_PATH" | cut -f1 -d:)
         tmp_hcoverlap_fulltext=$(sed ''"$tmp_hcoverlap_line"'!d' "$TEMP_SKIN_DIR"/skin.ini | sed -e 's/^[ \t]*//')
         hcoverlap_fulltext=$(sed ''"$hcoverlap_line"'!d' "$SKIN_INI_PATH")
-        echo "$tmp_hcoverlap_fulltext"
         sed -i "s/^.*HitCircleOverlap.*$/$tmp_hcoverlap_fulltext/" "$SKIN_INI_PATH"
         $NOTIFICATION_SYSTEM "From:$hcoverlap_fulltext To:$tmp_hcoverlap_fulltext"
     else
