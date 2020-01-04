@@ -21,7 +21,9 @@ Showcase of what it's capable of in it's current state:https://www.youtube.com/w
 
 **TODO**
 - Proper Restore functionality (currently Restore folder only saves previous configuration[overrides each time])
-- Ability to change ComboColors
+- Ability to change ComboColors/Hitsounds
+- Misc functionality (Openning skin.ini, current skin folder, etc..)
+- Online integration (Download skins or even elements on their own)
 
 
 Feel free to submit any issues or PR's to clean up some of the dirtiness that I've made!
