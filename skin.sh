@@ -46,7 +46,7 @@ then
         followcheck=$(ls "$FULL_PATH" | grep followpoint)
         if [ "$followcheck" = "" ] #If it doesn't, then...
         then
-            skin=$(ls "$BASE_DIR"/Skins | -l 30 -i -p "Select the skin that you want to take FollowPointdmenu s from.")
+            skin=$(ls "$BASE_DIR"/Skins | dmenu -l 30 -i -p "Select the skin that you want to take FollowPoints from.")
             if [ "$skin" = "" ]
             then
                 { $NOTIFICATION_SYSTEM "This skin directory doesn't exist!"; exit 1; }
