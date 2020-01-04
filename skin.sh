@@ -11,7 +11,6 @@ PLAIN_TEXT=$(cat "$BASE_DIR"/osu\!."$USER".cfg | sed -n 115p | sed 's/^.......//
 #############################
 #Converting Skin Name to Path#
 ##############################
-
 #Get Full Path to Current Skin
 FULL_PATH=$(echo "$BASE_DIR"/Skins/"$PLAIN_TEXT" | tr -d '\r')
 
@@ -145,6 +144,8 @@ then
     echo "User Have Chosen $initial, proceeding..."
     mkdir "$FULL_PATH"/Restore
     mkdir "$FULL_PATH"/Restore/Cursors
+    cd "$FULL_PATH"/Restore/Cursors || exit
+    rm -rf cursor*.png
     cd "$FULL_PATH" && cp -rf cursor*.png "$FULL_PATH"/Restore/Cursors
     rm -rf cursor*.png
     skin=$(ls "$BASE_DIR"/Skins | dmenu -l 30 -i -p "Select the skin that you want to take cursor from.")
