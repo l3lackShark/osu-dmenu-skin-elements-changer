@@ -46,21 +46,20 @@ then
         followcheck=$(ls "$FULL_PATH" | grep followpoint)
         if [ "$followcheck" = "" ] #If it doesn't, then...
         then
-            skin=$(ls "$BASE_DIR"/Skins | dmenu -l 30 -i -p "Select the skin that you want to take FollowPoints from.")
+            skin=$(ls "$BASE_DIR"/Skins | -l 30 -i -p "Select the skin that you want to take FollowPointdmenu s from.")
             if [ "$skin" = "" ]
             then
                 { $NOTIFICATION_SYSTEM "This skin directory doesn't exist!"; exit 1; }
             fi
-            $NOTIFICATION_SYSTEM "No followpoints in current directory, just copying new ones over"
+            $NOTIFICATION_SYSTEM "No followpoints in current skin, just copying new ones over"
             TEMP_SKIN_DIR=$(echo "$BASE_DIR/Skins/$skin" | tr -d '\r')
             cd "$TEMP_SKIN_DIR" || { $NOTIFICATION_SYSTEM "This skin directory doesn't exist!"; exit 1; }
-            echo "$TEMP_SKIN_DIR"
-            assetpath=$(find "$TEMP_SKIN_DIR" -name followpoint.png | sed 's%/[^/]*$%/%' | sed 's/^.\{2\}//')
+            assetpath=$(find "$TEMP_SKIN_DIR" -name followpoint.png | sed 's%/[^/]*$%/%' | sed 's/^.\{2\}//') #TODO FIX potential not found
             if [ "$assetpath" = "" ]
-            then
+            then  
                 followcheck=$(ls "$TEMP_SKIN_DIR" | grep followpoint)
                 if [ "$followcheck"  = "" ]
-                then { $NOTIFICATION_SYSTEM "No followpoints found in that skin!"; exit 1; }
+                then { $NOTIFICATION_SYSTEM "No followpoints found in that skin!"; exit 1; }   #TODO Fix Duplicate function
                 fi
             fi
             cd "$TEMP_SKIN_DIR" || exit
@@ -70,7 +69,6 @@ then
 
 
             rm -f "$FULL_PATH"/Restore/FollowPoints/* && cp skin.ini "$FULL_PATH"/Restore/FollowPoints
-            #echo $TEMP_SKIN_DIR
             cd "$TEMP_SKIN_DIR" || exit
             if [[ $(ls | grep followpoint) ]];
             then
