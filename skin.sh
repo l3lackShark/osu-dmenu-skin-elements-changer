@@ -56,7 +56,7 @@ then
             cd "$TEMP_SKIN_DIR" || { $NOTIFICATION_SYSTEM "This skin directory doesn't exist!"; exit 1; }
             assetpath=$(find "$TEMP_SKIN_DIR" -name followpoint.png | sed 's%/[^/]*$%/%' | sed 's/^.\{2\}//') #TODO FIX potential not found
             if [ "$assetpath" = "" ]
-            then  
+            then
                 followcheck=$(ls "$TEMP_SKIN_DIR" | grep followpoint)
                 if [ "$followcheck"  = "" ]
                 then { $NOTIFICATION_SYSTEM "No followpoints found in that skin!"; exit 1; }   #TODO Fix Duplicate function
@@ -75,12 +75,7 @@ then
                 $NOTIFICATION_SYSTEM "OK!, copying files over..."
                 cp -f followpoint*.png "$FULL_PATH"
             else
-                $NOTIFICATION_SYSTEM "No FollowPoint files in root, searching..."
-                cd "$TEMP_SKIN_DIR" || exit
-                assetpath=$(find . -name followpoint.png | sed 's%/[^/]*$%/%' | sed 's/^.\{2\}//')
-                cd "$assetpath" || exit
-                $NOTIFICATION_SYSTEM "OK! Found Assets in:""$assetpath" || { $NOTIFICATION_SYSTEM "No followpoints found in that skin!"; exit 1; }
-                cp followpoint*.png "$FULL_PATH"
+                { $NOTIFICATION_SYSTEM "No followpoints found in that skin!"; exit 1; }
 
             fi
 
@@ -108,12 +103,7 @@ then
                 cd "$TEMP_SKIN_DIR" || exit
                 cp -f followpoint*.png "$FULL_PATH"
             else
-                $NOTIFICATION_SYSTEM "No FollowPoint files in root, searching..."
-                cd "$TEMP_SKIN_DIR" || exit
-                assetpath=$(find . -name followpoint.png | sed 's%/[^/]*$%/%' | sed 's/^.\{2\}//')
-                cd "$assetpath" || exit
-                cp followpoint*.png "$FULL_PATH"
-                $NOTIFICATION_SYSTEM "OK! Found Assets in:""$assetpath"
+                { $NOTIFICATION_SYSTEM "No followpoints found in that skin!"; exit 1; }
             fi
         fi
     fi
@@ -153,13 +143,7 @@ then
                 $NOTIFICATION_SYSTEM "OK!, copying files over..."
                 cp -f followpoint*.png "$FULL_PATH"
             else
-                $NOTIFICATION_SYSTEM "No FollowPoint files in root, searching..."
-                cd "$TEMP_SKIN_DIR" || exit
-                assetpath=$(find . -name followpoint.png | sed 's%/[^/]*$%/%' | sed 's/^.\{2\}//')
-                echo "$assetpath" "HELLO"
-                cd "$assetpath" || exit
-                $NOTIFICATION_SYSTEM "OK! Found Assets in:""$assetpath" || { $NOTIFICATION_SYSTEM "No followpoints found in that skin!"; exit 1; }
-                cp followpoint*.png "$FULL_PATH"
+                { $NOTIFICATION_SYSTEM "No followpoints found in that skin!"; exit 1; }
 
             fi
 
@@ -187,12 +171,7 @@ then
                 cd "$TEMP_SKIN_DIR" || exit
                 cp -f followpoint*.png "$FULL_PATH"
             else
-                $NOTIFICATION_SYSTEM "No FollowPoint files in root, searching..."
-                cd "$TEMP_SKIN_DIR" || exit
-                assetpath=$(find . -name followpoint.png | sed 's%/[^/]*$%/%' | sed 's/^.\{2\}//')
-                cd "$assetpath" || exit
-                cp followpoint*.png "$FULL_PATH"
-                $NOTIFICATION_SYSTEM "OK! Found Assets in:""$assetpath"
+                { $NOTIFICATION_SYSTEM "No followpoints found in that skin!"; exit 1; }
             fi
         fi
         if cat "$TEMP_SKIN_DIR"/skin.ini | grep -q AnimationFramerate; #TODO "//" Handling
@@ -201,7 +180,7 @@ then
             follow_line=$(grep -nr AnimationFramerate "$SKIN_INI_PATH" | cut -f1 -d:)
             tmp_follow_fulltext=$(sed ''"$tmp_follow_line"'!d' "$TEMP_SKIN_DIR"/skin.ini | sed -e 's/^[ \t]*//')
             follow_fulltext=$(sed ''"$follow_line"'!d' "$SKIN_INI_PATH")
-            sed -i "s/^AnimationFramerate.*$/$tmp_follow_fulltext/" "$SKIN_INI_PATH" 
+            sed -i "s/^AnimationFramerate.*$/$tmp_follow_fulltext/" "$SKIN_INI_PATH"
             $NOTIFICATION_SYSTEM "From:$follow_fulltext To:$tmp_follow_fulltext"
         else
             $NOTIFICATION_SYSTEM "AnimationFramerate not found, commenting previous value..."
