@@ -41,16 +41,16 @@ then
 
     if [ "$chosen" = "No"  ]
     then
+        skin=$(ls "$BASE_DIR"/Skins | dmenu -l 30 -i -p "Select the skin that you want to take FollowPoints from.")
+        if [ "$skin" = ""  ]
+        then
+            exit 1
+        fi
         mkdir "$FULL_PATH"/Restore
         mkdir "$FULL_PATH"/Restore/FollowPoints
         rm -rf "$FULL_PATH"/Restore/FollowPoints/*
         cd "$FULL_PATH" || exit
         cp -rf followpoint*.png "$FULL_PATH"/Restore/FollowPoints && cp skin.ini "$FULL_PATH"/Restore/FollowPoints
-        skin=$(ls "$BASE_DIR"/Skins | dmenu -l 30 -i -p "Select the skin that you want to take FollowPoints from.")
-    if [ "$skin" = ""  ]
-    then
-    exit 1 
-    fi
         TEMP_SKIN_DIR=$(echo "$BASE_DIR/Skins/$skin" | tr -d '\r')
         #echo $TEMP_SKIN_DIR
         cd "$TEMP_SKIN_DIR" || exit
@@ -73,15 +73,15 @@ then
     fi
     if [ "$chosen" = "Yes" ]
     then
-        mkdir "$FULL_PATH"/Restore
-        mkdir "$FULL_PATH"/Restore/FollowPoints
-        rm -rf "$FULL_PATH"/Restore/FollowPoints/*
-        cd "$FULL_PATH" && cp -rf followpoint*.png "$FULL_PATH"/Restore/FollowPoints && cp skin.ini "$FULL_PATH"/Restore/FollowPoints
         skin=$(ls "$BASE_DIR"/Skins | dmenu -l 30 -i -p "Select the skin that you want to take FollowPoints from.")
         if [ "$skin" = "" ]
         then
             exit 1
         fi
+        mkdir "$FULL_PATH"/Restore
+        mkdir "$FULL_PATH"/Restore/FollowPoints
+        rm -rf "$FULL_PATH"/Restore/FollowPoints/*
+        cd "$FULL_PATH" && cp -rf followpoint*.png "$FULL_PATH"/Restore/FollowPoints && cp skin.ini "$FULL_PATH"/Restore/FollowPoints
         TEMP_SKIN_DIR=$(echo "$BASE_DIR/Skins/$skin" | tr -d '\r')
         if "$skin" = ""
         then
@@ -167,17 +167,17 @@ fi
 if [ "$initial" = "Cursor" ]
 then
     echo "User Have Chosen $initial, proceeding..."
+    skin=$(ls "$BASE_DIR"/Skins | dmenu -l 30 -i -p "Select the skin that you want to take cursor from.")
+    if [ "$skin" = "" ]
+    then
+        exit 1
+    fi
     mkdir "$FULL_PATH"/Restore
     mkdir "$FULL_PATH"/Restore/Cursors
     cd "$FULL_PATH"/Restore/Cursors || exit
     rm -rf cursor*.png
     cd "$FULL_PATH" && cp -rf cursor*.png "$FULL_PATH"/Restore/Cursors
     rm -rf cursor*.png
-    skin=$(ls "$BASE_DIR"/Skins | dmenu -l 30 -i -p "Select the skin that you want to take cursor from.")
-    if [ "$skin" = "" ]
-    then
-        exit 1
-    fi
     TEMP_SKIN_DIR=$(echo "$BASE_DIR/Skins/$skin" | tr -d '\r')
     cd "$TEMP_SKIN_DIR" || exit
     cp cursor*.png "$FULL_PATH/"
@@ -189,7 +189,6 @@ then
     echo "User Have Chosen $initial, proceeding..."
     echo "$FULL_PATH"
     skin=$(ls "$BASE_DIR"/Skins | dmenu -l 30 -i -p "Select the skin that you want to take elements from.")
-    echo "$skin"
     if [ "$skin" = "" ]
     then
         exit 1
