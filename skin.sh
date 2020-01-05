@@ -8,7 +8,6 @@ export NOTIFICATION_SYSTEM="notify-send"
 
 #Get Current Skin Name
 PLAIN_TEXT=$(grep -nrw "Skin =" "$BASE_DIR"/osu\!."$USER".cfg | sed 's/^...........//')
-echo "$PLAIN_TEXT"
 #############################
 #Converting Skin Name to Path#
 ##############################
@@ -245,17 +244,23 @@ then
     fi
     TEMP_SKIN_DIR=$(echo "$BASE_DIR/Skins/$skin" | tr -d '\r')
     cd "$TEMP_SKIN_DIR" || { $NOTIFICATION_SYSTEM "This skin directory doesn't exist!"; exit 1; }
-    mkdir "$FULL_PATH"/Restore
-    mkdir "$FULL_PATH"/Restore/Cursors
-    cd "$FULL_PATH"/Restore/Cursors || exit
-    rm -f cursor*.png
-    cd "$FULL_PATH" && cp -f cursor*.png "$FULL_PATH"/Restore/Cursors
-    rm -f cursor*.png
-    cd "$TEMP_SKIN_DIR" || exit
-    cp cursor*.png "$FULL_PATH/"
-    $NOTIFICATION_SYSTEM "Copied the cursor over"
-fi
+    if [ ! -f "$TEMP_SKIN_DIR"/cursor.png ] && [ ! -f "$TEMP_SKIN_DIR"/cursor@2x.png ] && [ ! -f "$TEMP_SKIN_DIR"/cursortrail.png ] && [ ! -f "$TEMP_SKIN_DIR"/cursortrail@2x.png ]
+    then
+        $NOTIFICATION_SYSTEM "There is no cursor in this skin!"
+    else
 
+        mkdir "$FULL_PATH"/Restore
+        mkdir "$FULL_PATH"/Restore/Cursors
+        cd "$FULL_PATH"/Restore/Cursors || exit
+        rm -f cursor*.png
+        cd "$FULL_PATH" && cp -f cursor*.png "$FULL_PATH"/Restore/Cursors
+        rm -f cursor*.png
+        cd "$TEMP_SKIN_DIR" || exit
+        cp cursor*.png "$FULL_PATH/"
+        $NOTIFICATION_SYSTEM "Copied the cursor over"
+
+    fi
+fi
 if [ "$initial" = "Defaults" ]
 then
     echo "User Have Chosen $initial, proceeding..."
