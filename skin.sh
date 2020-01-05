@@ -48,6 +48,10 @@ then
         then
             echo "I haven't exited yet!"
             skin=$(ls "$BASE_DIR"/Skins | dmenu -l 30 -i -p "Select the skin that you want to take FollowPoints from.")
+            if [ "$skin" = "" ]
+            then
+                { $NOTIFICATION_SYSTEM "This skin directory doesn't exist!"; exit 1; }
+            fi
             $NOTIFICATION_SYSTEM "No followpoints in current directory, just copying new ones over"
             TEMP_SKIN_DIR=$(echo "$BASE_DIR/Skins/$skin" | tr -d '\r')
             cd "$TEMP_SKIN_DIR" || { $NOTIFICATION_SYSTEM "This skin directory doesn't exist!"; exit 1; }
@@ -127,6 +131,10 @@ then
         then
             echo "I haven't exited yet!"
             skin=$(ls "$BASE_DIR"/Skins | dmenu -l 30 -i -p "Select the skin that you want to take FollowPoints from.")
+            if [ "$skin" = "" ]
+            then
+                { $NOTIFICATION_SYSTEM "This skin directory doesn't exist!"; exit 1; }
+            fi
             $NOTIFICATION_SYSTEM "No followpoints in current directory, just copying new ones over"
             TEMP_SKIN_DIR=$(echo "$BASE_DIR/Skins/$skin" | tr -d '\r')
             cd "$TEMP_SKIN_DIR" || { $NOTIFICATION_SYSTEM "This skin directory doesn't exist!"; exit 1; }
@@ -251,6 +259,7 @@ then
         cd "$FULL_PATH"/Restore/Cursors || exit
         cp -- * "$FULL_PATH"/
         $NOTIFICATION_SYSTEM "Restored the Cursor!"
+        $NOTIFICATION_SYSTEM "Restored the Cursor!"
     fi
 
 
@@ -259,18 +268,20 @@ fi
 if [ "$initial" = "Cursor" ]
 then
     echo "User Have Chosen $initial, proceeding..."
+    followcheck=$(ls "$FULL_PATH" | grep cursor)
     skin=$(ls "$BASE_DIR"/Skins | dmenu -l 30 -i -p "Select the skin that you want to take cursor from.")
     if [ "$skin" = "" ]
     then
-        exit 1
+        { $NOTIFICATION_SYSTEM "This skin directory doesn't exist!"; exit 1; }
     fi
+    TEMP_SKIN_DIR=$(echo "$BASE_DIR/Skins/$skin" | tr -d '\r')
+    cd "$TEMP_SKIN_DIR" || { $NOTIFICATION_SYSTEM "This skin directory doesn't exist!"; exit 1; }
     mkdir "$FULL_PATH"/Restore
     mkdir "$FULL_PATH"/Restore/Cursors
     cd "$FULL_PATH"/Restore/Cursors || exit
     rm -f cursor*.png
     cd "$FULL_PATH" && cp -f cursor*.png "$FULL_PATH"/Restore/Cursors
     rm -f cursor*.png
-    TEMP_SKIN_DIR=$(echo "$BASE_DIR/Skins/$skin" | tr -d '\r')
     cd "$TEMP_SKIN_DIR" || exit
     cp cursor*.png "$FULL_PATH/"
     $NOTIFICATION_SYSTEM "Copied the cursor over"
@@ -283,53 +294,51 @@ then
     skin=$(ls "$BASE_DIR"/Skins | dmenu -l 30 -i -p "Select the skin that you want to take elements from.")
     if [ "$skin" = "" ]
     then
-        exit 1
-    else
-        mkdir "$FULL_PATH"/Restore
-        mkdir "$FULL_PATH"/Restore/Defaults
-        rm -f "$FULL_PATH"/Restore/Defaults/*
-        #cd $FULL_PATH
+        { $NOTIFICATION_SYSTEM "This skin directory doesn't exist!"; exit 1; }
+    fi
+    TEMP_SKIN_DIR=$(echo "$BASE_DIR/Skins/$skin" | tr -d '\r')
+    cd "$TEMP_SKIN_DIR" || { $NOTIFICATION_SYSTEM "This skin directory doesn't exist!"; exit 1; }
+    mkdir "$FULL_PATH"/Restore
+    mkdir "$FULL_PATH"/Restore/Defaults
+    rm -f "$FULL_PATH"/Restore/Defaults/*
+    #cd $FULL_PATH
+    cd "$FULL_PATH" || exit
+    cp -f default-*.png "$FULL_PATH"/Restore/Defaults/
+    cp skin.ini "$FULL_PATH"/Restore/Defaults/
+
+    #echo $TEMP_SKIN_DIR
+    cd "$TEMP_SKIN_DIR" || exit
+    if [[ $(ls | grep default) ]];
+    then
+        $NOTIFICATION_SYSTEM "OK!, copying files over..."
         cd "$FULL_PATH" || exit
-        cp -f default-*.png "$FULL_PATH"/Restore/Defaults/
-        cp skin.ini "$FULL_PATH"/Restore/Defaults/
-
-        TEMP_SKIN_DIR=$(echo "$BASE_DIR/Skins/$skin" | tr -d '\r')
-        #echo $TEMP_SKIN_DIR
+        rm -f default-*.png
         cd "$TEMP_SKIN_DIR" || exit
-        if [[ $(ls | grep default) ]];
-        then
-            $NOTIFICATION_SYSTEM "OK!, copying files over..."
-            cd "$FULL_PATH" || exit
-            rm -f default-*.png
-            cd "$TEMP_SKIN_DIR" || exit
-            cp -f default-*.png "$FULL_PATH"
-        else
-            $NOTIFICATION_SYSTEM "No default files in root, searching..."
-            cd "$TEMP_SKIN_DIR" || exit
-            assetpath=$(find . -name default-1.png | sed 's%/[^/]*$%/%' | sed 's/^.\{2\}//')
-            #echo $assetpath
-            cd "$assetpath" || exit
-            cp default-*.png "$FULL_PATH"
-            $NOTIFICATION_SYSTEM "OK! Found Assets in:""$assetpath"
-        fi
-
-        #grep2=$(cat "$TEMP_SKIN_DIR"/skin.ini | grep -E  Combo[0-9]+ | dmenu -i -p "Hello")
-        #tmp_hcoverlap=$(cat "$TEMP_SKIN_DIR"/skin.ini | grep HitCircleOverlap)
-
-        #echo $TEMP_SKIN_DIR
-        if cat "$TEMP_SKIN_DIR"/skin.ini | grep -q HitCircleOverlap;
-        then
-            tmp_hcoverlap_line=$(grep -nr HitCircleOverlap "$TEMP_SKIN_DIR"/skin.ini | cut -f1 -d:)
-            hcoverlap_line=$(grep -nr HitCircleOverlap "$SKIN_INI_PATH" | cut -f1 -d:)
-            tmp_hcoverlap_fulltext=$(sed ''"$tmp_hcoverlap_line"'!d' "$TEMP_SKIN_DIR"/skin.ini | sed -e 's/^[ \t]*//')
-            hcoverlap_fulltext=$(sed ''"$hcoverlap_line"'!d' "$SKIN_INI_PATH")
-            echo "$tmp_hcoverlap_fulltext"
-            sed -i "s/^.*HitCircleOverlap.*$/$tmp_hcoverlap_fulltext/" "$SKIN_INI_PATH"
-            $NOTIFICATION_SYSTEM "From:$hcoverlap_fulltext To:$tmp_hcoverlap_fulltext"
-        else
-            $NOTIFICATION_SYSTEM "HitCircleOverlap not found"
-        fi
+        cp -f default-*.png "$FULL_PATH"
+    else
+        $NOTIFICATION_SYSTEM "No default files in root, searching..."
+        cd "$TEMP_SKIN_DIR" || exit
+        assetpath=$(find . -name default-1.png | sed 's%/[^/]*$%/%' | sed 's/^.\{2\}//')
+        #echo $assetpath
+        cd "$assetpath" || exit
+        cp default-*.png "$FULL_PATH"
+        $NOTIFICATION_SYSTEM "OK! Found Assets in:""$assetpath"
     fi
 
+    #grep2=$(cat "$TEMP_SKIN_DIR"/skin.ini | grep -E  Combo[0-9]+ | dmenu -i -p "Hello")
+    #tmp_hcoverlap=$(cat "$TEMP_SKIN_DIR"/skin.ini | grep HitCircleOverlap)
 
+    #echo $TEMP_SKIN_DIR
+    if cat "$TEMP_SKIN_DIR"/skin.ini | grep -q HitCircleOverlap;
+    then
+        tmp_hcoverlap_line=$(grep -nr HitCircleOverlap "$TEMP_SKIN_DIR"/skin.ini | cut -f1 -d:)
+        hcoverlap_line=$(grep -nr HitCircleOverlap "$SKIN_INI_PATH" | cut -f1 -d:)
+        tmp_hcoverlap_fulltext=$(sed ''"$tmp_hcoverlap_line"'!d' "$TEMP_SKIN_DIR"/skin.ini | sed -e 's/^[ \t]*//')
+        hcoverlap_fulltext=$(sed ''"$hcoverlap_line"'!d' "$SKIN_INI_PATH")
+        echo "$tmp_hcoverlap_fulltext"
+        sed -i "s/^.*HitCircleOverlap.*$/$tmp_hcoverlap_fulltext/" "$SKIN_INI_PATH"
+        $NOTIFICATION_SYSTEM "From:$hcoverlap_fulltext To:$tmp_hcoverlap_fulltext"
+    else
+        $NOTIFICATION_SYSTEM "HitCircleOverlap not found"
+    fi
 fi
