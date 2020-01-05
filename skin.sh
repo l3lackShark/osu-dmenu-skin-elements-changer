@@ -7,7 +7,8 @@ export BASE_DIR="/home/blackshark/drives/ps3drive/osu!"
 export NOTIFICATION_SYSTEM="notify-send"
 
 #Get Current Skin Name
-PLAIN_TEXT=$(cat "$BASE_DIR"/osu\!."$USER".cfg | sed -n 115p | sed 's/^.......//')
+PLAIN_TEXT=$(grep -nrw "Skin =" "$BASE_DIR"/osu\!."$USER".cfg | sed 's/^...........//')
+echo "$PLAIN_TEXT"
 #############################
 #Converting Skin Name to Path#
 ##############################
