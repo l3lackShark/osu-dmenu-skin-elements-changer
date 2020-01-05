@@ -39,36 +39,84 @@ then
         exit 1
     fi
 
+
     if [ "$chosen" = "No"  ]
     then
-        skin=$(ls "$BASE_DIR"/Skins | dmenu -l 30 -i -p "Select the skin that you want to take FollowPoints from.")
-        if [ "$skin" = ""  ]
+        #Check if current skin has followpoints.
+        followcheck=$(ls "$FULL_PATH" | grep followpoint)
+        if [ "$followcheck" = "" ] #If it doesn't, then...
         then
-            exit 1
-        fi
-        mkdir "$FULL_PATH"/Restore
-        mkdir "$FULL_PATH"/Restore/FollowPoints
-        rm -rf "$FULL_PATH"/Restore/FollowPoints/*
-        cd "$FULL_PATH" || exit
-        cp -rf followpoint*.png "$FULL_PATH"/Restore/FollowPoints && cp skin.ini "$FULL_PATH"/Restore/FollowPoints
-        TEMP_SKIN_DIR=$(echo "$BASE_DIR/Skins/$skin" | tr -d '\r')
-        #echo $TEMP_SKIN_DIR
-        cd "$TEMP_SKIN_DIR" || exit
-        if [[ $(ls | grep followpoint) ]];
-        then
-            $NOTIFICATION_SYSTEM "OK!, copying files over..."
-            cd "$FULL_PATH" || exit
-            rm -rf followpoint*.png
+            echo "I haven't exited yet!"
+            skin=$(ls "$BASE_DIR"/Skins | dmenu -l 30 -i -p "Select the skin that you want to take FollowPoints from.")
+            $NOTIFICATION_SYSTEM "No followpoints in current directory, just copying new ones over"
+            TEMP_SKIN_DIR=$(echo "$BASE_DIR/Skins/$skin" | tr -d '\r')
+            cd "$TEMP_SKIN_DIR" || { $NOTIFICATION_SYSTEM "This skin directory doesn't exist!"; exit 1; }
+            echo "$TEMP_SKIN_DIR"
+            assetpath=$(find "$TEMP_SKIN_DIR" -name followpoint.png | sed 's%/[^/]*$%/%' | sed 's/^.\{2\}//')
+            if [ "$assetpath" = "" ]
+            then
+                followcheck=$(ls "$TEMP_SKIN_DIR" | grep followpoint)
+                if [ "$followcheck"  = "" ]
+                then { $NOTIFICATION_SYSTEM "No followpoints found in that skin!"; exit 1; }
+                fi
+            fi
             cd "$TEMP_SKIN_DIR" || exit
-            cp -rf followpoint*.png "$FULL_PATH"
+
+            mkdir "$FULL_PATH"/Restore
+            mkdir "$FULL_PATH"/Restore/FollowPoints
+
+
+            rm -f "$FULL_PATH"/Restore/FollowPoints/* && cp skin.ini "$FULL_PATH"/Restore/FollowPoints
+            #echo $TEMP_SKIN_DIR
+            cd "$TEMP_SKIN_DIR" || exit
+            if [[ $(ls | grep followpoint) ]];
+            then
+                $NOTIFICATION_SYSTEM "OK!, copying files over..."
+                cp -f followpoint*.png "$FULL_PATH"
+            else
+                $NOTIFICATION_SYSTEM "No FollowPoint files in root, searching..."
+                cd "$TEMP_SKIN_DIR" || exit
+                assetpath=$(find . -name followpoint.png | sed 's%/[^/]*$%/%' | sed 's/^.\{2\}//')
+                echo "$assetpath" "HELLO"
+                cd "$assetpath" || exit
+                $NOTIFICATION_SYSTEM "OK! Found Assets in:""$assetpath" || { $NOTIFICATION_SYSTEM "No followpoints found in that skin!"; exit 1; }
+                cp followpoint*.png "$FULL_PATH"
+
+            fi
+
         else
-            $NOTIFICATION_SYSTEM "No FollowPoint files in root, searching..."
+
+
+            skin=$(ls "$BASE_DIR"/Skins | dmenu -l 30 -i -p "Select the skin that you want to take FollowPoints from.")
+            TEMP_SKIN_DIR=$(echo "$BASE_DIR/Skins/$skin" | tr -d '\r')
+            cd "$TEMP_SKIN_DIR" || { $NOTIFICATION_SYSTEM "This skin directory doesn't exist!"; exit 1; }
+
+            mkdir "$FULL_PATH"/Restore
+            mkdir "$FULL_PATH"/Restore/FollowPoints
+
+
+            rm -f "$FULL_PATH"/Restore/FollowPoints/*
+            cd "$FULL_PATH" || exit
+            cp -f followpoint*.png "$FULL_PATH"/Restore/FollowPoints && cp skin.ini "$FULL_PATH"/Restore/FollowPoints
+            TEMP_SKIN_DIR=$(echo "$BASE_DIR/Skins/$skin" | tr -d '\r')
+            #echo $TEMP_SKIN_DIR
             cd "$TEMP_SKIN_DIR" || exit
-            assetpath=$(find . -name followpoint.png | sed 's%/[^/]*$%/%' | sed 's/^.\{2\}//')
-            #echo $assetpath
-            cd "$assetpath" || exit
-            cp followpoint*.png "$FULL_PATH"
-            $NOTIFICATION_SYSTEM "OK! Found Assets in:""$assetpath"
+            if [[ $(ls | grep followpoint) ]];
+            then
+                $NOTIFICATION_SYSTEM "OK!, copying files over..."
+                cd "$FULL_PATH" || exit
+                rm -f followpoint*.png
+                cd "$TEMP_SKIN_DIR" || exit
+                cp -f followpoint*.png "$FULL_PATH"
+            else
+                $NOTIFICATION_SYSTEM "No FollowPoint files in root, searching..."
+                cd "$TEMP_SKIN_DIR" || exit
+                assetpath=$(find . -name followpoint.png | sed 's%/[^/]*$%/%' | sed 's/^.\{2\}//')
+                #echo $assetpath
+                cd "$assetpath" || exit
+                cp followpoint*.png "$FULL_PATH"
+                $NOTIFICATION_SYSTEM "OK! Found Assets in:""$assetpath"
+            fi
         fi
     fi
     if [ "$chosen" = "Yes" ]
@@ -80,8 +128,8 @@ then
         fi
         mkdir "$FULL_PATH"/Restore
         mkdir "$FULL_PATH"/Restore/FollowPoints
-        rm -rf "$FULL_PATH"/Restore/FollowPoints/*
-        cd "$FULL_PATH" && cp -rf followpoint*.png "$FULL_PATH"/Restore/FollowPoints && cp skin.ini "$FULL_PATH"/Restore/FollowPoints
+        rm -f "$FULL_PATH"/Restore/FollowPoints/*
+        cd "$FULL_PATH" && cp -f followpoint*.png "$FULL_PATH"/Restore/FollowPoints && cp skin.ini "$FULL_PATH"/Restore/FollowPoints
         TEMP_SKIN_DIR=$(echo "$BASE_DIR/Skins/$skin" | tr -d '\r')
         if "$skin" = ""
         then
@@ -93,9 +141,9 @@ then
         then
             $NOTIFICATION_SYSTEM "OK!, copying files over..."
             cd "$FULL_PATH" || exit
-            rm -rf followpoint*.png
+            rm -f followpoint*.png
             cd "$TEMP_SKIN_DIR" || exit
-            cp -rf followpoint*.png "$FULL_PATH"
+            cp -f followpoint*.png "$FULL_PATH"
         else
             $NOTIFICATION_SYSTEM "No FollowPoint files in root, searching..."
             cd "$TEMP_SKIN_DIR" || exit
@@ -137,8 +185,8 @@ then
     if [ "$chosen" = "FollowPoints" ]
     then
         cd "$FULL_PATH" || exit
-        rm -rf followpoint*.png
-        rm -rf skin.ini
+        rm -f followpoint*.png
+        rm -f skin.ini
         cd "$FULL_PATH"/Restore/FollowPoints || exit
         cp -- * "$FULL_PATH"/
         $NOTIFICATION_SYSTEM "Restored the FollowPoints!"
@@ -146,8 +194,8 @@ then
     if [ "$chosen" = "Defaults" ]
     then
         cd "$FULL_PATH" || exit
-        rm -rf default-*.png
-        rm -rf skin.ini
+        rm -f default-*.png
+        rm -f skin.ini
         cd "$FULL_PATH"/Restore/Defaults || exit
         cp -- * "$FULL_PATH"/
         $NOTIFICATION_SYSTEM "Restored the Defaults!"
@@ -155,7 +203,7 @@ then
     if [ "$chosen" = "Cursor" ]
     then
         cd "$FULL_PATH" || exit
-        rm -rf cursor*.png
+        rm -f cursor*.png
         cd "$FULL_PATH"/Restore/Cursors || exit
         cp -- * "$FULL_PATH"/
         $NOTIFICATION_SYSTEM "Restored the Cursor!"
@@ -175,9 +223,9 @@ then
     mkdir "$FULL_PATH"/Restore
     mkdir "$FULL_PATH"/Restore/Cursors
     cd "$FULL_PATH"/Restore/Cursors || exit
-    rm -rf cursor*.png
-    cd "$FULL_PATH" && cp -rf cursor*.png "$FULL_PATH"/Restore/Cursors
-    rm -rf cursor*.png
+    rm -f cursor*.png
+    cd "$FULL_PATH" && cp -f cursor*.png "$FULL_PATH"/Restore/Cursors
+    rm -f cursor*.png
     TEMP_SKIN_DIR=$(echo "$BASE_DIR/Skins/$skin" | tr -d '\r')
     cd "$TEMP_SKIN_DIR" || exit
     cp cursor*.png "$FULL_PATH/"
@@ -195,10 +243,10 @@ then
     else
         mkdir "$FULL_PATH"/Restore
         mkdir "$FULL_PATH"/Restore/Defaults
-        rm -rf "$FULL_PATH"/Restore/Defaults/*
+        rm -f "$FULL_PATH"/Restore/Defaults/*
         #cd $FULL_PATH
         cd "$FULL_PATH" || exit
-        cp -rf default-*.png "$FULL_PATH"/Restore/Defaults/
+        cp -f default-*.png "$FULL_PATH"/Restore/Defaults/
         cp skin.ini "$FULL_PATH"/Restore/Defaults/
 
         TEMP_SKIN_DIR=$(echo "$BASE_DIR/Skins/$skin" | tr -d '\r')
@@ -208,9 +256,9 @@ then
         then
             $NOTIFICATION_SYSTEM "OK!, copying files over..."
             cd "$FULL_PATH" || exit
-            rm -rf default-*.png
+            rm -f default-*.png
             cd "$TEMP_SKIN_DIR" || exit
-            cp -rf default-*.png "$FULL_PATH"
+            cp -f default-*.png "$FULL_PATH"
         else
             $NOTIFICATION_SYSTEM "No default files in root, searching..."
             cd "$TEMP_SKIN_DIR" || exit
