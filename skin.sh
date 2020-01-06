@@ -23,7 +23,83 @@ export SKIN_INI_PATH="$FULL_PATH/skin.ini"
 
 
 #Initial Question
-initial=$(echo -e "Defaults\nFollowPoints\nCursor\nRestore"  | dmenu -i -p "Your current skin is $PLAIN_TEXT, choose the element that you want to modify.")
+initial=$(echo -e "Defaults\nFollowPoints\nCursor\nHitSounds\nRestore"  | dmenu -i -p "Your current skin is $PLAIN_TEXT, choose the element that you want to modify.")
+
+if [ "$initial" = "HitSounds"  ]
+then
+    #Check if current skin has hitsounds.
+    followcheck=$(ls "$FULL_PATH" | grep normal)
+    if [ "$followcheck" = "" ] #If it doesn't, then...
+    then
+        skin=$(ls "$BASE_DIR"/Skins | dmenu -l 30 -i -p "Select the skin that you want to take HitSounds from.")
+        if [ "$skin" = "" ]
+        then
+            { $NOTIFICATION_SYSTEM "This skin directory doesn't exist!"; exit 1; }
+        fi
+        $NOTIFICATION_SYSTEM "No hitsounds in current skin, just copying new ones over"
+        TEMP_SKIN_DIR=$(echo "$BASE_DIR/Skins/$skin" | tr -d '\r')
+        cd "$TEMP_SKIN_DIR" || { $NOTIFICATION_SYSTEM "This skin directory doesn't exist!"; exit 1; }
+        assetpath=$(find "$TEMP_SKIN_DIR" -name normal-hitnormal.wav | sed 's%/[^/]*$%/%' | sed 's/^.\{2\}//') #TODO FIX potential not found
+        if [ "$assetpath" = "" ]
+        then
+            followcheck=$(ls "$TEMP_SKIN_DIR" | grep normal)
+            if [ "$followcheck"  = "" ]
+            then { $NOTIFICATION_SYSTEM "No followpoints found in that skin!"; exit 1; }   #TODO Fix Duplicate function
+            fi
+        fi
+        cd "$TEMP_SKIN_DIR" || exit
+
+        mkdir "$FULL_PATH"/Restore
+        mkdir "$FULL_PATH"/Restore/HitSounds
+
+
+        rm -f "$FULL_PATH"/Restore/HitSounds/*
+        cd "$TEMP_SKIN_DIR" || exit
+        if [[ $(ls | grep normal) ]];
+        then
+            $NOTIFICATION_SYSTEM "OK!, copying files over..."
+            cp -f normal* "$FULL_PATH"
+            cp -f drum* "$FULL_PATH"
+            cp -f soft* "$FULL_PATH"
+        else
+            { $NOTIFICATION_SYSTEM "No hitsounds found in that skin!"; exit 1; }
+
+        fi
+
+    else
+
+
+        skin=$(ls "$BASE_DIR"/Skins | dmenu -l 30 -i -p "Select the skin that you want to take HitSounds from.")
+        TEMP_SKIN_DIR=$(echo "$BASE_DIR/Skins/$skin" | tr -d '\r')
+        cd "$TEMP_SKIN_DIR" || { $NOTIFICATION_SYSTEM "This skin directory doesn't exist!"; exit 1; }
+
+        mkdir "$FULL_PATH"/Restore
+        mkdir "$FULL_PATH"/Restore/HitSounds
+
+
+        rm -f "$FULL_PATH"/Restore/HitSounds/*
+        cd "$FULL_PATH" || exit
+        cp -f normal* "$FULL_PATH"/Restore/HitSounds
+        cp -f soft* "$FULL_PATH"/Restore/HitSounds
+        cp -f drum* "$FULL_PATH"/Restore/HitSounds
+        TEMP_SKIN_DIR=$(echo "$BASE_DIR/Skins/$skin" | tr -d '\r')
+        cd "$TEMP_SKIN_DIR" || exit
+        if [[ $(ls | grep normal) ]];
+        then
+            $NOTIFICATION_SYSTEM "OK!, copying files over..."
+            cd "$FULL_PATH" || exit
+            rm -f normal*
+            rm -f soft*
+            rm -f drum*
+            cd "$TEMP_SKIN_DIR" || exit
+            cp -f normal* "$FULL_PATH"
+            cp -f drum* "$FULL_PATH"
+            cp -f soft* "$FULL_PATH"
+        else
+            { $NOTIFICATION_SYSTEM "No hitsounds found in that skin!"; exit 1; }
+        fi
+    fi
+fi
 
 if [ "$initial" = "" ]
 then
@@ -193,10 +269,10 @@ then
     fi
 fi
 
-if [ "$initial" = "Restore" ]
+if [ "$initial" = "Restore" ] #TODO Exception Handling
 then
     echo "User Have Chosen" "$initial"
-    chosen=$(echo -e "Defaults\nCursor\nFollowPoints" | dmenu -i -p "What do you want to restore?")
+    chosen=$(echo -e "Defaults\nCursor\nFollowPoints\nHitSounds" | dmenu -i -p "What do you want to restore?")
 
     if [ "$chosen" = "" ]
     then
@@ -227,7 +303,18 @@ then
         cd "$FULL_PATH"/Restore/Cursors || exit
         cp -- * "$FULL_PATH"/
         $NOTIFICATION_SYSTEM "Restored the Cursor!"
-        $NOTIFICATION_SYSTEM "Restored the Cursor!"
+    fi
+    if [ "$chosen" = "HitSounds" ]
+    then
+        cd "$FULL_PATH" || exit
+        rm -f normal*
+        rm -f soft*
+        rm -f drum*
+        cd "$FULL_PATH"/Restore/HitSounds || exit
+        cp -f normal* "$FULL_PATH"
+        cp -f drum* "$FULL_PATH"
+        cp -f soft* "$FULL_PATH"
+        $NOTIFICATION_SYSTEM "Restored the HitSounds!"
     fi
 
 
