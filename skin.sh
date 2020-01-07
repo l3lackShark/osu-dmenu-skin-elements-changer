@@ -1,7 +1,17 @@
 #!/bin/bash
 
 #Put your osu! folder here!
-export BASE_DIR="/home/blackshark/drives/ps3drive/osu!"
+export BASE_DIR="C:\osu!"
+
+
+#Put your Windows username here (not osu!)
+export USER="blackshark"
+
+#######################################
+#       osu-dmenu-script ver 0.3      #
+#     do not touch anything below     #
+#######################################
+
 
 #Do not touch this unless it doesn't work! (specify your notification manager executable)
 export NOTIFICATION_SYSTEM="notify-send "dmenu-osu""
