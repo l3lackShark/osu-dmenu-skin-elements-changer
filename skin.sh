@@ -98,6 +98,8 @@ then
                             comboprefix_fulltext=$(sed ''"$comboprefix_line"'!d' "$SKIN_INI_PATH")
                             sed -i "s/^.*ComboPrefix.*$/ComboPrefix: combo/" "$SKIN_INI_PATH"
                             $NOTIFICATION_SYSTEM "From:$comboprefix_fulltext To:ComboPrefix: combo"
+                            exit 1
+
                         else
                             $NOTIFICATION_SYSTEM "ComboPrefix not found, which means that combo is already enabled!" && exit 1
                         fi
@@ -112,6 +114,8 @@ then
                             comboprefix_fulltext=$(sed ''"$comboprefix_line"'!d' "$SKIN_INI_PATH")
                             sed -i "s/^.*ComboPrefix.*$/#ComboPrefix enabled/" "$SKIN_INI_PATH"
                             $NOTIFICATION_SYSTEM "From:$comboprefix_fulltext To:#ComboPrefix enabled"
+                            exit 1
+
                         else
                             $NOTIFICATION_SYSTEM "ComboPrefix not found, which means that combo is already enabled!" && exit 1
                         fi
@@ -143,12 +147,16 @@ then
                                 comboprefix_fulltext=$(sed ''"$comboprefix_line"'!d' "$SKIN_INI_PATH")
                                 sed -i "s/^.*ComboPrefix.*$/#ComboPrefix: enabled/" "$SKIN_INI_PATH"
                                 $NOTIFICATION_SYSTEM "From:$comboprefix_fulltext To:#ComboPrefix: enabled"
+                                exit 1
+
                             else
-                                $NOTIFICATION_SYSTEM "ComboPrefix not found, which means that combo is already enabled!" && exit 1
+                                $NOTIFICATION_SYSTEM "ComboPrefix not found, which means that combo is already enabled!"
+                                exit 1
                             fi
 
                         else
-                            $NOTIFICATION_SYSTEM "This should not happen! If this happened, then I live on Mars! (skin.ini nof found)" && exit 1
+                            $NOTIFICATION_SYSTEM "This should not happen! If this happened, then I live on Mars! (skin.ini nof found)"
+                            exit 1
                         fi
                     fi
                 fi
@@ -167,12 +175,15 @@ then
                             comboprefix_fulltext=$(sed ''"$comboprefix_line"'!d' "$SKIN_INI_PATH")
                             sed -i "s/^.*ComboPrefix.*$/ComboPrefix: combo/" "$SKIN_INI_PATH"
                             $NOTIFICATION_SYSTEM "From:$comboprefix_fulltext To:ComboPrefix: combo"
+                            exit 1
                         else
-                            $NOTIFICATION_SYSTEM "ComboPrefix not found, which means that combo is already enabled!" && exit 1
+                            $NOTIFICATION_SYSTEM "ComboPrefix not found, which means that combo is already enabled!"
+                            exit 1
                         fi
 
                     else
-                        $NOTIFICATION_SYSTEM "This should not happen! If this happened, then I live on Mars! (skin.ini nof found)" && exit 1
+                        $NOTIFICATION_SYSTEM "This should not happen! If this happened, then I live on Mars! (skin.ini nof found)"
+                        exit 1
                     fi
                 fi
 
@@ -199,6 +210,7 @@ then
             comboprefix_fulltext=$(sed ''"$comboprefix_line"'!d' "$SKIN_INI_PATH")
             sed -i "s/^.*ComboPrefix.*$/ComboPrefix: no/" "$SKIN_INI_PATH"
             $NOTIFICATION_SYSTEM "From:$comboprefix_fulltext To:ComboPrefix: no"
+            exit 1
         else
             $NOTIFICATION_SYSTEM "ComboPrefix not found"
             comboprefix_line=$(grep -wnri Fonts "$SKIN_INI_PATH" | cut -f1 -d:)
@@ -206,6 +218,7 @@ then
             insert='ComboPrefix: no'
             sed -i "s/$match/$match\n$insert/" "$SKIN_INI_PATH"
             $NOTIFICATION_SYSTEM "From:$comboprefix_fulltext To:ComboPrefix: no"
+            exit 1
         fi
 
 
@@ -230,11 +243,9 @@ then
         then
             followcheck=$(ls "$TEMP_SKIN_DIR" | grep normal)
             if [ "$followcheck"  = "" ]
-            then { $NOTIFICATION_SYSTEM "No followpoints found in that skin!"; exit 1; }   #TODO Fix Duplicate function
+            then { $NOTIFICATION_SYSTEM "No hitsounds found in that skin!"; exit 1; }   #TODO Fix Duplicate function
             fi
         fi
-        cd "$TEMP_SKIN_DIR" || exit
-
         mkdir "$FULL_PATH"/Restore
         mkdir "$FULL_PATH"/Restore/HitSounds
 
@@ -246,7 +257,9 @@ then
             echo "OK!, copying files over..."
             cp -f normal* "$FULL_PATH"
             cp -f soft* "$FULL_PATH"
+            cp -f drum* "$FULL_PATH"
             $NOTIFICATION_SYSTEM "Finished copying!"
+            exit 1
         else
             { $NOTIFICATION_SYSTEM "No hitsounds found in that skin!"; exit 1; }
 
@@ -282,6 +295,7 @@ then
             cp -f drum* "$FULL_PATH"
             cp -f soft* "$FULL_PATH"
             $NOTIFICATION_SYSTEM "Finished copying!"
+            exit 1
         else
             { $NOTIFICATION_SYSTEM "No hitsounds found in that skin!"; exit 1; }
         fi
@@ -338,6 +352,7 @@ then
                 echo "OK!, copying files over..."
                 cp -f followpoint*.png "$FULL_PATH"
                 $NOTIFICATION_SYSTEM "Finished copying!"
+                exit 1
             else
                 { $NOTIFICATION_SYSTEM "No followpoints found in that skin!"; exit 1; }
 
@@ -367,6 +382,7 @@ then
                 cd "$TEMP_SKIN_DIR" || exit
                 cp -f followpoint*.png "$FULL_PATH"
                 $NOTIFICATION_SYSTEM "Finished copying!"
+                exit 1
             else
                 { $NOTIFICATION_SYSTEM "No followpoints found in that skin!"; exit 1; }
             fi
@@ -408,6 +424,7 @@ then
                 echo "OK!, copying files over..."
                 cp -f followpoint*.png "$FULL_PATH"
                 $NOTIFICATION_SYSTEM "Finished copying!"
+                exit 1
             else
                 { $NOTIFICATION_SYSTEM "No followpoints found in that skin!"; exit 1; }
 
@@ -437,6 +454,7 @@ then
                 cd "$TEMP_SKIN_DIR" || exit
                 cp -f followpoint*.png "$FULL_PATH"
                 $NOTIFICATION_SYSTEM "Finished copying!"
+                exit 1
             else
                 { $NOTIFICATION_SYSTEM "No followpoints found in that skin!"; exit 1; }
             fi
@@ -449,11 +467,13 @@ then
             follow_fulltext=$(sed ''"$follow_line"'!d' "$SKIN_INI_PATH")
             sed -i "s/^AnimationFramerate.*$/$tmp_follow_fulltext/" "$SKIN_INI_PATH"
             $NOTIFICATION_SYSTEM "From:$follow_fulltext To:$tmp_follow_fulltext"
+            exit 1
         else
             $NOTIFICATION_SYSTEM "AnimationFramerate not found, commenting previous value..."
             #tmp_null_framerate=$("//AnimationFramerate: 30")
             #sed 's/.*AnimationFramerate/'#&/' $SKIN_INI_PATH
             sed -i 's/^AnimationFramerate/#&/' "$SKIN_INI_PATH"
+            exit 1
 
 
         fi
@@ -477,6 +497,7 @@ then
         cd "$FULL_PATH"/Restore/FollowPoints || exit
         cp -- * "$FULL_PATH"/
         $NOTIFICATION_SYSTEM "Restored the FollowPoints!"
+        exit 1
     fi
     if [ "$chosen" = "Defaults" ]
     then
@@ -486,6 +507,7 @@ then
         cd "$FULL_PATH"/Restore/Defaults || exit
         cp -- * "$FULL_PATH"/
         $NOTIFICATION_SYSTEM "Restored the Defaults!"
+        exit 1
     fi
     if [ "$chosen" = "Cursor" ]
     then
@@ -494,6 +516,7 @@ then
         cd "$FULL_PATH"/Restore/Cursors || exit
         cp -- * "$FULL_PATH"/
         $NOTIFICATION_SYSTEM "Restored the Cursor!"
+        exit 1
     fi
     if [ "$chosen" = "HitSounds" ]
     then
@@ -506,6 +529,7 @@ then
         cp -f drum* "$FULL_PATH"
         cp -f soft* "$FULL_PATH"
         $NOTIFICATION_SYSTEM "Restored the HitSounds!"
+        exit 1
     fi
 
 
@@ -525,6 +549,7 @@ then
     if [ ! -f "$TEMP_SKIN_DIR"/cursor.png ] && [ ! -f "$TEMP_SKIN_DIR"/cursor@2x.png ] && [ ! -f "$TEMP_SKIN_DIR"/cursortrail.png ] && [ ! -f "$TEMP_SKIN_DIR"/cursortrail@2x.png ]
     then
         $NOTIFICATION_SYSTEM "There is no cursor in this skin!"
+        exit 1
     else
 
         mkdir "$FULL_PATH"/Restore
@@ -536,6 +561,7 @@ then
         cd "$TEMP_SKIN_DIR" || exit
         cp cursor*.png "$FULL_PATH/"
         $NOTIFICATION_SYSTEM "Copied the cursor over"
+        exit 1
 
     fi
 fi
@@ -564,6 +590,7 @@ then
         cd "$TEMP_SKIN_DIR" || exit
         cp -f default-*.png "$FULL_PATH"
         $NOTIFICATION_SYSTEM "Finished copying!"
+        exit 1
     else
         $NOTIFICATION_SYSTEM "No default files in root, searching..."
         cd "$TEMP_SKIN_DIR" || exit
@@ -571,6 +598,7 @@ then
         cd "$assetpath" || exit
         cp default-*.png "$FULL_PATH"
         $NOTIFICATION_SYSTEM "OK! Found Assets in:""$assetpath"
+        exit 1
     fi
 
     #grep2=$(cat "$TEMP_SKIN_DIR"/skin.ini | grep -E  Combo[0-9]+ | dmenu -i -p "Hello")
@@ -584,7 +612,9 @@ then
         hcoverlap_fulltext=$(sed ''"$hcoverlap_line"'!d' "$SKIN_INI_PATH")
         sed -i "s/^.*HitCircleOverlap.*$/$tmp_hcoverlap_fulltext/" "$SKIN_INI_PATH"
         $NOTIFICATION_SYSTEM "From:$hcoverlap_fulltext To:$tmp_hcoverlap_fulltext"
+        exit 1
     else
         $NOTIFICATION_SYSTEM "HitCircleOverlap not found"
+        exit 1
     fi
 fi
