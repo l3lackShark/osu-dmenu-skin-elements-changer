@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #Put your osu! folder here!
-export BASE_DIR=/home/blackshark/drives/ps3drive/osu!
+export BASE_DIR=
 
 #######################################
 #       osu-dmenu-script ver 0.3      #
