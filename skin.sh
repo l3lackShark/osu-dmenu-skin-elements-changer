@@ -48,7 +48,7 @@ then
                 combowombocheck=$(ls "$FULL_PATH" | grep combo-)
                 if [ "$combowombocheck" != "" ]      #This happens if combo is  found in root
                 then
-                    cd "$FULL_PATH"
+                    cd "$FULL_PATH" || exit
                     if [[ $(ls | grep skin) ]];
                     then
                         if cat "$FULL_PATH"/skin.ini | grep -q ComboPrefix;
@@ -202,10 +202,9 @@ then
         cd "$TEMP_SKIN_DIR" || exit
         if [[ $(ls | grep normal) ]];
         then
-            $NOTIFICATION_SYSTEM "OK!, copying files over..."
-            cp -f normal* "$FULL_PATH" || exit
-            cp -f drum* "$FULL_PATH" || exit
-            cp -f soft* "$FULL_PATH" || exit
+            echo "OK!, copying files over..."
+            cp -f normal* "$FULL_PATH"
+            cp -f soft* "$FULL_PATH" 
             $NOTIFICATION_SYSTEM "Finished copying!"
         else
             { $NOTIFICATION_SYSTEM "No hitsounds found in that skin!"; exit 1; }
@@ -232,15 +231,15 @@ then
         cd "$TEMP_SKIN_DIR" || exit
         if [[ $(ls | grep normal) ]];
         then
-            $NOTIFICATION_SYSTEM "OK!, copying files over..."
+            echo "OK!, copying files over..."
             cd "$FULL_PATH" || exit
-            rm -f normal* || exit
-            rm -f soft* || exit
-            rm -f drum* || exit
+            rm -f normal* 
+            rm -f soft* 
+            rm -f drum* 
             cd "$TEMP_SKIN_DIR" || exit
-            cp -f normal* "$FULL_PATH" || exit
-            cp -f drum* "$FULL_PATH" || exit
-            cp -f soft* "$FULL_PATH" || exit
+            cp -f normal* "$FULL_PATH" 
+            cp -f drum* "$FULL_PATH" 
+            cp -f soft* "$FULL_PATH" 
             $NOTIFICATION_SYSTEM "Finished copying!"
         else
             { $NOTIFICATION_SYSTEM "No hitsounds found in that skin!"; exit 1; }
@@ -295,8 +294,9 @@ then
             cd "$TEMP_SKIN_DIR" || exit
             if [[ $(ls | grep followpoint) ]];
             then
-                $NOTIFICATION_SYSTEM "OK!, copying files over..."
+                echo "OK!, copying files over..."
                 cp -f followpoint*.png "$FULL_PATH"
+                $NOTIFICATION_SYSTEM "Finished copying!"
             else
                 { $NOTIFICATION_SYSTEM "No followpoints found in that skin!"; exit 1; }
 
@@ -320,11 +320,12 @@ then
             cd "$TEMP_SKIN_DIR" || exit
             if [[ $(ls | grep followpoint) ]];
             then
-                $NOTIFICATION_SYSTEM "OK!, copying files over..."
+                echo "OK!, copying files over..."
                 cd "$FULL_PATH" || exit
                 rm -f followpoint*.png
                 cd "$TEMP_SKIN_DIR" || exit
                 cp -f followpoint*.png "$FULL_PATH"
+                $NOTIFICATION_SYSTEM "Finished copying!"
             else
                 { $NOTIFICATION_SYSTEM "No followpoints found in that skin!"; exit 1; }
             fi
@@ -363,8 +364,9 @@ then
             cd "$TEMP_SKIN_DIR" || exit
             if [[ $(ls | grep followpoint) ]];
             then
-                $NOTIFICATION_SYSTEM "OK!, copying files over..."
+                echo "OK!, copying files over..."
                 cp -f followpoint*.png "$FULL_PATH"
+                $NOTIFICATION_SYSTEM "Finished copying!"
             else
                 { $NOTIFICATION_SYSTEM "No followpoints found in that skin!"; exit 1; }
 
@@ -388,11 +390,12 @@ then
             cd "$TEMP_SKIN_DIR" || exit
             if [[ $(ls | grep followpoint) ]];
             then
-                $NOTIFICATION_SYSTEM "OK!, copying files over..."
+                echo "OK!, copying files over..."
                 cd "$FULL_PATH" || exit
                 rm -f followpoint*.png
                 cd "$TEMP_SKIN_DIR" || exit
                 cp -f followpoint*.png "$FULL_PATH"
+                $NOTIFICATION_SYSTEM "Finished copying!"
             else
                 { $NOTIFICATION_SYSTEM "No followpoints found in that skin!"; exit 1; }
             fi
@@ -514,11 +517,12 @@ then
     cd "$TEMP_SKIN_DIR" || exit
     if [[ $(ls | grep default) ]];
     then
-        $NOTIFICATION_SYSTEM "OK!, copying files over..."
+        echo "OK!, copying files over..."
         cd "$FULL_PATH" || exit
         rm -f default-*.png
         cd "$TEMP_SKIN_DIR" || exit
         cp -f default-*.png "$FULL_PATH"
+        $NOTIFICATION_SYSTEM "Finished copying!"
     else
         $NOTIFICATION_SYSTEM "No default files in root, searching..."
         cd "$TEMP_SKIN_DIR" || exit
