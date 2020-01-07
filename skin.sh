@@ -1,8 +1,7 @@
 #!/bin/bash
 
 #Put your osu! folder here!
-export BASE_DIR="/home/blackshark/drives/ps3drive/osu!"
-
+export BASE_DIR=/home/blackshark/drives/ps3drive/osu!
 
 #######################################
 #       osu-dmenu-script ver 0.3      #
@@ -13,19 +12,50 @@ export BASE_DIR="/home/blackshark/drives/ps3drive/osu!"
 #Do not touch this unless it doesn't work! (specify your notification manager executable)
 export NOTIFICATION_SYSTEM="notify-send "dmenu-osu""
 
-#Get Current Skin Name
-PLAIN_TEXT=$(grep -nrw "Skin =" "$BASE_DIR"/osu\!."$USER".cfg | sed 's/^...........//')
+
 ##############################
 
 ##############################
+
+
+
+
+
+
+if [ "$BASE_DIR" = ""  ]
+then
+    type zenity || { $NOTIFICATION_SYSTEM "Please install Zenity"; exit 1; }
+    __dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+    sh_path="$__dir"/skin.sh
+    #echo "$sh_path"
+    $NOTIFICATION_SYSTEM "Choose your osu! folder!"
+    BASE_DIR_PATH=$(zenity --file-selection --directory --title="Choose your osu! folder!")
+    dircheck=$(ls "$BASE_DIR_PATH" | grep osu.dll)
+    if [ "$dircheck" = "" ]
+    then
+        { $NOTIFICATION_SYSTEM "Incorrect path!"; exit 1; }
+    fi
+    #echo $BASE_DIR_PATH
+    BASE_DIR="export BASE_DIR=$BASE_DIR_PATH"
+    #echo "$BASE_DIR"
+    #sed -i "4s/.*/$BASE_DIR" < "$sh_path"
+    sed -i "4s@export BASE_DIR=@$BASE_DIR@" "$sh_path"
+    $NOTIFICATION_SYSTEM "Changed the osu! directory!"
+    BASE_DIR="$BASE_DIR_PATH"
+
+
+fi
+
+#Get Current Skin Name
+PLAIN_TEXT=$(grep -nrw "Skin =" "$BASE_DIR"/osu\!."$USER".cfg | sed 's/^...........//')
+
+
+
 #Get Full Path to Current Skin
 FULL_PATH=$(echo "$BASE_DIR"/Skins/"$PLAIN_TEXT" | tr -d '\r')
 
 #Get Current skin.ini
 export SKIN_INI_PATH="$FULL_PATH/skin.ini"
-
-
-
 
 
 
@@ -615,3 +645,4 @@ then
         exit 1
     fi
 fi
+

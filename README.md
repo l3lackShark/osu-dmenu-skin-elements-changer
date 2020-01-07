@@ -5,6 +5,7 @@ Showcase of what it's capable of in it's current state:https://www.youtube.com/w
 
 **Dependencies:**
 - dmenu
+- zenity (available in most distributions by default)
 - Probably any Notification Manager in existence, tested with **dunstify**
 
 **Capabilities**
@@ -16,9 +17,7 @@ Misc functionality (Enabling/Disabling on-screen combo)
 **Get Started** 
 1. git clone https://github.com/l3lackShark/osu-dmenu-skin-elements-changer.git
 2. cd osu-dmenu-skin-elements-changer
-3. chmod +x skin.sh
-4. change the 4th line to match your configuration
-4. ./skin.sh
+3. ./skin.sh
 
 **TODO**
 - Proper Restore functionality (currently Restore folder only saves previous configuration[overrides each time])
