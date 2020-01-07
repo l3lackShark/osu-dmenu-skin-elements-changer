@@ -61,7 +61,22 @@ then
                             $NOTIFICATION_SYSTEM "ComboPrefix not found, which means that combo is already enabled!" && exit 1
                         fi
                     fi
+                else
+                    cd "$FULL_PATH" || exit
+                    if [[ $(ls | grep skin) ]];
+                    then
+                        if cat "$FULL_PATH"/skin.ini | grep -q ComboPrefix;
+                        then
+                            comboprefix_line=$(grep -nr ComboPrefix "$SKIN_INI_PATH" | cut -f1 -d:)
+                            comboprefix_fulltext=$(sed ''"$comboprefix_line"'!d' "$SKIN_INI_PATH")
+                            sed -i "s/^.*ComboPrefix.*$/#ComboPrefix enabled/" "$SKIN_INI_PATH"
+                            $NOTIFICATION_SYSTEM "From:$comboprefix_fulltext To:#ComboPrefix enabled"
+                        else
+                            $NOTIFICATION_SYSTEM "ComboPrefix not found, which means that combo is already enabled!" && exit 1
+                        fi
+                    fi
                 fi
+
             else
                 $NOTIFICATION_SYSTEM "We have an asset folder here! (no problem)"
                 #$NOTIFICATION_SYSTEM "$assetpath"
@@ -95,65 +110,64 @@ then
                             $NOTIFICATION_SYSTEM "This should not happen! If this happened, then I live on Mars! (skin.ini nof found)" && exit 1
                         fi
                     fi
-
-
-
-                    if [ $lastchoice = "Yes" ]
-                    then
-                        cd "$FULL_PATH"/"$assetpath" || exit  #might be not needed
-                        mv -f -- combo-* "$FULL_PATH"
-                        cd "$FULL_PATH" || exit
-                        if [[ $(ls | grep skin) ]];
-                        then
-                            if cat "$FULL_PATH"/skin.ini | grep -q ComboPrefix;
-                            then
-                                comboprefix_line=$(grep -nr ComboPrefix "$SKIN_INI_PATH" | cut -f1 -d:)
-                                comboprefix_fulltext=$(sed ''"$comboprefix_line"'!d' "$SKIN_INI_PATH")
-                                sed -i "s/^.*ComboPrefix.*$/ComboPrefix: combo/" "$SKIN_INI_PATH"
-                                $NOTIFICATION_SYSTEM "From:$comboprefix_fulltext To:ComboPrefix: combo"
-                            else
-                                $NOTIFICATION_SYSTEM "ComboPrefix not found, which means that combo is already enabled!" && exit 1
-                            fi
-
-                        else
-                            $NOTIFICATION_SYSTEM "This should not happen! If this happened, then I live on Mars! (skin.ini nof found)" && exit 1
-                        fi
-                    fi
-
                 fi
+
+
+                if [ $lastchoice = "Yes" ]
+                then
+                    cd "$FULL_PATH"/"$assetpath" || exit  #might be not needed
+                    mv -f -- combo-* "$FULL_PATH"
+                    cd "$FULL_PATH" || exit
+                    if [[ $(ls | grep skin) ]];
+                    then
+                        if cat "$FULL_PATH"/skin.ini | grep -q ComboPrefix;
+                        then
+                            comboprefix_line=$(grep -nr ComboPrefix "$SKIN_INI_PATH" | cut -f1 -d:)
+                            comboprefix_fulltext=$(sed ''"$comboprefix_line"'!d' "$SKIN_INI_PATH")
+                            sed -i "s/^.*ComboPrefix.*$/ComboPrefix: combo/" "$SKIN_INI_PATH"
+                            $NOTIFICATION_SYSTEM "From:$comboprefix_fulltext To:ComboPrefix: combo"
+                        else
+                            $NOTIFICATION_SYSTEM "ComboPrefix not found, which means that combo is already enabled!" && exit 1
+                        fi
+
+                    else
+                        $NOTIFICATION_SYSTEM "This should not happen! If this happened, then I live on Mars! (skin.ini nof found)" && exit 1
+                    fi
+                fi
+
             fi
         fi
     fi
+fi
 
-    if [ "$chosen" = "Disable..." ]
+if [ "$chosen" = "Disable..." ]
+then
+    extra=$(echo -e "Combo" | dmenu -i -p "What do you wannna Disable?")
+    if [ "$extra" = "Combo" ]
     then
-        extra=$(echo -e "Combo" | dmenu -i -p "What do you wannna Disable?")
-        if [ "$extra" = "Combo" ]
+        mkdir "$FULL_PATH"/Restore
+        mkdir "$FULL_PATH"/Restore/Combo/Disabled
+        cd "$FULL_PATH" || exit
+        cp skin.ini "$FULL_PATH"/Restore/Combo/Disabled
+
+
+
+        if cat "$FULL_PATH"/skin.ini | grep -q ComboPrefix;
         then
-            mkdir "$FULL_PATH"/Restore
-            mkdir "$FULL_PATH"/Restore/Combo/Disabled
-            cd "$FULL_PATH" || exit
-            cp skin.ini "$FULL_PATH"/Restore/Combo/Disabled
-
-
-
-            if cat "$FULL_PATH"/skin.ini | grep -q ComboPrefix;
-            then
-                comboprefix_line=$(grep -nr ComboPrefix "$SKIN_INI_PATH" | cut -f1 -d:)
-                comboprefix_fulltext=$(sed ''"$comboprefix_line"'!d' "$SKIN_INI_PATH")
-                sed -i "s/^.*ComboPrefix.*$/ComboPrefix: no/" "$SKIN_INI_PATH"
-                $NOTIFICATION_SYSTEM "From:$comboprefix_fulltext To:ComboPrefix: no"
-            else
-                $NOTIFICATION_SYSTEM "ComboPrefix not found"
-                comboprefix_line=$(grep -wnri Fonts "$SKIN_INI_PATH" | cut -f1 -d:)
-                match="Fonts]"
-                insert='ComboPrefix: no'
-                sed -i "s/$match/$match\n$insert/" "$SKIN_INI_PATH"
-                $NOTIFICATION_SYSTEM "From:$comboprefix_fulltext To:ComboPrefix: no"
-            fi
-
-
+            comboprefix_line=$(grep -nr ComboPrefix "$SKIN_INI_PATH" | cut -f1 -d:)
+            comboprefix_fulltext=$(sed ''"$comboprefix_line"'!d' "$SKIN_INI_PATH")
+            sed -i "s/^.*ComboPrefix.*$/ComboPrefix: no/" "$SKIN_INI_PATH"
+            $NOTIFICATION_SYSTEM "From:$comboprefix_fulltext To:ComboPrefix: no"
+        else
+            $NOTIFICATION_SYSTEM "ComboPrefix not found"
+            comboprefix_line=$(grep -wnri Fonts "$SKIN_INI_PATH" | cut -f1 -d:)
+            match="Fonts]"
+            insert='ComboPrefix: no'
+            sed -i "s/$match/$match\n$insert/" "$SKIN_INI_PATH"
+            $NOTIFICATION_SYSTEM "From:$comboprefix_fulltext To:ComboPrefix: no"
         fi
+
+
     fi
 fi
 if [ "$initial" = "HitSounds"  ]
@@ -189,9 +203,9 @@ then
         if [[ $(ls | grep normal) ]];
         then
             $NOTIFICATION_SYSTEM "OK!, copying files over..."
-            cp -f normal* "$FULL_PATH"
-            cp -f drum* "$FULL_PATH"
-            cp -f soft* "$FULL_PATH"
+            cp -f normal* "$FULL_PATH" || exit
+            cp -f drum* "$FULL_PATH" || exit
+            cp -f soft* "$FULL_PATH" || exit
             $NOTIFICATION_SYSTEM "Finished copying!"
         else
             { $NOTIFICATION_SYSTEM "No hitsounds found in that skin!"; exit 1; }
@@ -220,13 +234,14 @@ then
         then
             $NOTIFICATION_SYSTEM "OK!, copying files over..."
             cd "$FULL_PATH" || exit
-            rm -f normal*
-            rm -f soft*
-            rm -f drum*
+            rm -f normal* || exit
+            rm -f soft* || exit
+            rm -f drum* || exit
             cd "$TEMP_SKIN_DIR" || exit
-            cp -f normal* "$FULL_PATH"
-            cp -f drum* "$FULL_PATH"
-            cp -f soft* "$FULL_PATH"
+            cp -f normal* "$FULL_PATH" || exit
+            cp -f drum* "$FULL_PATH" || exit
+            cp -f soft* "$FULL_PATH" || exit
+            $NOTIFICATION_SYSTEM "Finished copying!"
         else
             { $NOTIFICATION_SYSTEM "No hitsounds found in that skin!"; exit 1; }
         fi
