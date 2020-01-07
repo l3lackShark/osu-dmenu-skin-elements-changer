@@ -64,7 +64,7 @@ then
             selectedskin_line=$(grep -nr -- "$skinlist" secretfile.txt | cut -f1 -d:)
             dlskin_line=$((selectedskin_line + 1))
             dlskin_fulltext=$(sed ''"$dlskin_line"'!d' secretfile.txt)
-            explorer.exe "$dlskin_fulltext"
+            xdg-open "$dlskin_fulltext"
             $NOTIFICATION_SYSTEM "Found the skin... opening in default browser..."
             rm -f secretfile.txt
             exit 1
