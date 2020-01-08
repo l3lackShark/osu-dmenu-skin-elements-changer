@@ -8,9 +8,10 @@ Showcase of what it's capable of in it's current state:https://www.youtube.com/w
 - Probably any Notification Manager in existence, tested with **dunstify**
 
 **Capabilities**
-- Chaging Defaults/Cursors/FollowPoints on the Fly! (also changes HitCircleOverlap and AnimationFramerate)
+- Chaging Defaults/Cursors/FollowPoints/Hitsounds on the Fly! (also changes HitCircleOverlap and AnimationFramerate)
 - Backing up previous configuration and Restoring to it later (Restore)
 - Works with assets that are not in the root skin directory. F.E. $SKIN/Assets/defaults/default-1.png
+Misc functionality (Enabling/Disabling on-screen combo)
 
 **Get Started** 
 1. git clone https://github.com/l3lackShark/osu-dmenu-skin-elements-changer.git
@@ -21,8 +22,7 @@ Showcase of what it's capable of in it's current state:https://www.youtube.com/w
 
 **TODO**
 - Proper Restore functionality (currently Restore folder only saves previous configuration[overrides each time])
-- Ability to change ComboColors/Hitsounds
-- Misc functionality (openning skin.ini, current skin folder, etc..)
+- Ability to change ComboColors
 - Online integration (download skins or even elements on their own)
 
 
