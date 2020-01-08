@@ -9,7 +9,7 @@ export NOTIFICATION_SYSTEM="notify-send"
 #Get Current Skin Name
 PLAIN_TEXT=$(grep -nrw "Skin =" "$BASE_DIR"/osu\!."$USER".cfg | sed 's/^...........//')
 ##############################
-#Converting Skin Name to Path#
+
 ##############################
 #Get Full Path to Current Skin
 FULL_PATH=$(echo "$BASE_DIR"/Skins/"$PLAIN_TEXT" | tr -d '\r')
@@ -28,12 +28,44 @@ initial=$(echo -e "Defaults\nFollowPoints\nCursor\nHitSounds\nMisc\nRestore"  | 
 if [ "$initial" = "Misc"  ]
 then
     echo "User Have Chosen" "$initial"
-    chosen=$(echo -e "Enable...\nDisable..." | dmenu -i -p "What do you wanna do?")
+    chosen=$(echo -e "Enable...\nDisable...\nDownload..." | dmenu -i -p "What do you wanna do?")
     if [ "$chosen" = "" ]
     then
         exit 1
     fi
 
+
+    if [ "$chosen" = "Download..." ]
+    then
+        echo "User Have Chosen" "$chosen"
+        extra=$(echo -e "Skin from osuck" | dmenu -i -p "What do you wanna download?")
+        if [ "$extra" != "Skin from osuck" ]
+        then
+            { $NOTIFICATION_SYSTEM "Unexpected answer!"; exit 1; }
+        fi
+
+        if [ "$extra" = "Skin from osuck" ]
+        then
+            cd "$BASE_DIR" || exit
+            curl -s 'https://huhu.glitch.me' > secretfile.txt
+            skinlist=$(cat secretfile.txt | sort -V | sed '/ck1t/d' | dmenu -l 30 -i -p "Select the skin that you want to download.")
+            if [ "$skinlist" = "" ]
+            then
+                { $NOTIFICATION_SYSTEM "This skin doesn't exist!"; rm -f secretfile.txt; exit 1; }
+            fi
+            cat secretfile.txt | grep "$skinlist" || { $NOTIFICATION_SYSTEM "This skin doesn't exist!"; rm -f secretfile.txt; exit 1; }
+            selectedskin_line=$(grep -nr -- "$skinlist" secretfile.txt | cut -f1 -d:)
+            dlskin_line=$((selectedskin_line + 1))
+            dlskin_fulltext=$(sed ''"$dlskin_line"'!d' secretfile.txt)
+            type xdg-open || { $NOTIFICATION_SYSTEM "Something went wrong, exiting..."; rm -f secretfile.txt; exit 1; }
+            xdg-open "$dlskin_fulltext"
+            $NOTIFICATION_SYSTEM "Found the skin... opening in default browser..."
+            rm -f secretfile.txt
+            exit 1
+
+        fi
+
+    fi
 
 
     if [ "$chosen" = "Enable..." ]
@@ -204,7 +236,7 @@ then
         then
             echo "OK!, copying files over..."
             cp -f normal* "$FULL_PATH"
-            cp -f soft* "$FULL_PATH" 
+            cp -f soft* "$FULL_PATH"
             $NOTIFICATION_SYSTEM "Finished copying!"
         else
             { $NOTIFICATION_SYSTEM "No hitsounds found in that skin!"; exit 1; }
@@ -233,13 +265,13 @@ then
         then
             echo "OK!, copying files over..."
             cd "$FULL_PATH" || exit
-            rm -f normal* 
-            rm -f soft* 
-            rm -f drum* 
+            rm -f normal*
+            rm -f soft*
+            rm -f drum*
             cd "$TEMP_SKIN_DIR" || exit
-            cp -f normal* "$FULL_PATH" 
-            cp -f drum* "$FULL_PATH" 
-            cp -f soft* "$FULL_PATH" 
+            cp -f normal* "$FULL_PATH"
+            cp -f drum* "$FULL_PATH"
+            cp -f soft* "$FULL_PATH"
             $NOTIFICATION_SYSTEM "Finished copying!"
         else
             { $NOTIFICATION_SYSTEM "No hitsounds found in that skin!"; exit 1; }
